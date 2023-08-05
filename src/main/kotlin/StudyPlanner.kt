@@ -1,6 +1,7 @@
 import data.Date
 import data.PRIORITY
 import data.Subject
+import kotlin.math.pow
 
 class StudyPlanner(private val subjects: List<Subject>) {
 
@@ -22,51 +23,63 @@ class StudyPlanner(private val subjects: List<Subject>) {
         subjects.filter(predicate)
 
     fun getValidVariation(subjects: List<Subject>): List<List<Subject>> {
-
-
         val combination: MutableList<MutableList<Subject>> = mutableListOf()
-        for((index, first) in subjects.withIndex()){
-            combination.add(mutableListOf<Subject>())
-            combination[index].add(first)
+        val names = getAllSubjectNames(subjects).distinct();
+        val classes = getAllSubjectClasses(subjects).distinct();
+        val lenght = if (names.size > classes.size) names.size.toDouble()
+            .pow(classes.size.toDouble()) else classes.size.toDouble()
+            .pow(names.size.toDouble())
 
-            for(second in subjects){
-                if(first.id === second.id) continue
-                if(hasListAProperty(combination[index], second)) continue
-                combination[index].add(second)
-            }
+        val maxFistIt = (lenght / names.size).toInt()
+
+        for (index in 0..maxFistIt) {
+            val name = names[index]
 
         }
 
-        //for((index, fist) in subjects.withIndex()){
-        //    combination.add(mutableListOf<Subject>())
-        //    combination[index].add(fist)
-        //    for(second in subjects){
-        //        if(fist.subject === second.subject) continue
-        //        if((combination[index].map { it -> it.subject }).contains(second.subject)) continue
+        val resultArray = mutableListOf<List<String>>()
 
-        //        combination[index].add(second)
-        //    }
-        //}
 
-        for (list in combination){
-            list.sortBy { it.subject }
-            for(item in list){
-                printSubject(item)
-            }
-            println()
-        }
+
+
+        println(resultArray)
+
         return combination;
     }
 
-    private fun hasListAProperty(subjects: List<Subject>, match: Subject)
-        = subjects.contains(match)
+    fun groupSubjectListAsList(subject: List<Subject>): List<List<Subject>> {
+        val subjectNames = getAllSubjectNames(subjects).distinct();
+        println(subjectNames)
+        return subjectNames.map { subjectName ->
+            getSubjectsByProperty(subjects) { it.subject == subjectName }
+        }
+
+    }
+
+    fun groupSubjectListAsMap(subject: List<Subject>): Map<String, List<Subject>> {
+        val map = mutableMapOf<String, List<Subject>>();
+        val subjectNames = getAllSubjectNames(subjects).distinct();
+        subjectNames.forEach { subjectName ->
+            map[subjectName] = getSubjectsByProperty(subjects) { it.subject == subjectName }
+        }
+        return map
+    }
+
+    fun hasListAProperty(subjects: List<Subject>, property: String, condition: (Subject, String) -> Boolean): Boolean {
+        return subjects.fold(false) { store, next ->
+            if (store) return true
+            condition(next, property)
+        }
+    }
 
     private fun getAllSubjectNames(subjects: List<Subject>) = subjects.map { it.subject }
+    private fun getAllSubjectClasses(subjects: List<Subject>) = subjects.map { it.className }
 
     private fun printSubject(subject: Subject)
         = print("{ ${subject.subject} - ${subject.className} - ${datesToString(subject.dates)} } ")
 
     private fun datesToString(dates: List<Date>) = (dates.map { it -> "${it.weekDay} - ${it.from} - ${it.to}"})
+
 }
 
 

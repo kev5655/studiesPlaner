@@ -1,0 +1,277 @@
+{
+  "subjectsToDo": {
+    "BZG1155": {
+      "I1p": {
+        "name": "Diskrete Mathematik 1",
+        "className": "I1p",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Mon",
+            "from": "12:45",
+            "to": "14:20",
+            "online": false
+          },
+          {
+            "weekDay": "Wed",
+            "from": "16:15",
+            "to": "17:50",
+            "online": true
+          }
+        ]
+      },
+      "I1q": {
+        "name": "Diskrete Mathematik 1",
+        "className": "I1q",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Mon",
+            "from": "14:25",
+            "to": "16:00",
+            "online": false
+          },
+          {
+            "weekDay": "Wed",
+            "from": "18:10",
+            "to": "19:45",
+            "online": true
+          }
+        ]
+      }
+    },
+    "BTI1111": {
+      "I1p": {
+        "name": "Requirements Engineering",
+        "className": "Ip1",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Wed",
+            "from": "18:10",
+            "to": "19:45",
+            "online": true
+          }
+        ]
+      },
+      "I1q": {
+        "name": "Requirements Engineering",
+        "className": "I1q",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Wed",
+            "from": "19:55",
+            "to": "21:30",
+            "online": true
+          }
+        ]
+      }
+    }
+  },
+  "subjectsOptions": {
+    "BTI1011": {
+      "I2p-I2q": {
+        "name": "Programming 2 with Java",
+        "priority": "LOW",
+        "studiesModle": "part time",
+        "className": "I2p-I2q",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Wed",
+            "from": "16:15",
+            "to": "19:45",
+            "online": true
+          }
+        ]
+      }
+    },
+    "BTI3011": {
+      "I2p-I2q": {
+        "name": "Project and Training 2",
+        "priority": "LOW",
+        "studiesModle": "part time",
+        "className": "I2p-I2q",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Tue",
+            "from": "18:10",
+            "to": "21:30",
+            "online": true
+          }
+        ]
+      }
+    },
+    "BTI1301": {
+      "I2p": {
+        "name": "Web Programming",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I2p",
+        "statDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Mon",
+            "from": "12:45",
+            "to": "14:20",
+            "online": false
+          },
+          {
+            "weekDay": "Thu",
+            "form": "16:15",
+            "to": "17:50",
+            "online": true
+          }
+        ]
+      },
+      "I2q": {
+        "name": "Web Programming",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I2q",
+        "statDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Mon",
+            "from": "08:20",
+            "to": "09:55",
+            "online": false
+          },
+          {
+            "weekDay": "Thu",
+            "from": "18:10",
+            "to": "19:45",
+            "online": true
+          }
+        ]
+      }
+    },
+    "BTI1341": {
+      "I2p": {
+        "name": "Operating Systems",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I2p",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Mon",
+            "from": "10:20",
+            "to": "11:55",
+            "online": false
+          },
+          {
+            "weekDay": "Tue",
+            "from": "16:15",
+            "to": "17:50",
+            "online": true
+          }
+        ]
+      },
+      "I2q": {
+        "name": "Operating Systems",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I2q",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Mon",
+            "from": "12:45",
+            "to": "14:20",
+            "online": true
+          },
+          {
+            "weekDay": "Thu",
+            "from": "16:15",
+            "to": "17:50",
+            "online": false
+          }
+        ]
+      }
+    },
+    "BZG3407": {
+      "I2p": {
+        "name": "International English 1",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I2p",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Thu",
+            "from": "18:10",
+            "to": "19:45",
+            "online": true
+          }
+        ]
+      },
+      "I2q": {
+        "name": "International English 1",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I2q",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Thu",
+            "from": "19:55",
+            "to": "21:30",
+            "online": true
+          }
+        ]
+      }
+    },
+    "BZG1159": {
+      "I3p": {
+        "name": "Introduction to IT-Security",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I3p",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Fri",
+            "from": "12:45",
+            "to": "14:20",
+            "online": false
+          }
+        ]
+      },
+      "I3q": {
+        "name": "Introduction to IT-Security",
+        "priority": "MEDIUM",
+        "studiesModle": "part time",
+        "className": "I3q",
+        "startDay": "18.09.2023",
+        "endDay": "22.01.2024",
+        "dates": [
+          {
+            "weekDay": "Fri",
+            "from": "10:20",
+            "to": "11:55",
+            "online": false
+          }
+        ]
+      }
+    }
+  },
+  "subjectsOptionsFullTime": {
+
+  }
+}

@@ -15,7 +15,6 @@ class StudyPlanner(private val subjects: List<Subject>) {
 
         findValidSearchCombinations(subjectsToDo)
 
-
         return Output("Test", "Test", "Test")
     }
 
@@ -79,7 +78,7 @@ class StudyPlanner(private val subjects: List<Subject>) {
         return combinationList
     }
 
-    fun generatePowersOfTwoDescending(length: Int): MutableList<Int> {
+    private fun generatePowersOfTwoDescending(length: Int): MutableList<Int> {
         val powersOfTwoList = mutableListOf<Int>()
 
         var value = 1
@@ -93,7 +92,7 @@ class StudyPlanner(private val subjects: List<Subject>) {
         return powersOfTwoList.reversed().toMutableList()
     }
 
-    fun buildVariationDataMap(subjects: List<Subject>): Map<String, Int> {
+    private fun buildVariationDataMap(subjects: List<Subject>): Map<String, Int> {
         val subjectNames = getAllSubjectNames(subjects).distinct()
         val subjectCounts = subjectNames.map { name -> getHowManyClassesHasSubject(subjects, name) }
         if (subjectNames.size != subjectCounts.size) throw Exception("List of names and List of numbers do not have the same length")
@@ -107,14 +106,14 @@ class StudyPlanner(private val subjects: List<Subject>) {
         return variationDataMap
     }
 
-    fun calculateNumberOfVariations(subjects: List<Subject>): Int {
+    private fun calculateNumberOfVariations(subjects: List<Subject>): Int {
         val subjectNames = getAllSubjectNames(subjects).distinct()
         val subjectCounts = subjectNames.map { name -> getHowManyClassesHasSubject(subjects, name) }
         return subjectCounts.reduce { store, next -> store * next }
     }
 
 
-    fun groupSubjectListAsList(subject: List<Subject>): List<List<Subject>> {
+    fun groupSubjectListAsList(subjects: List<Subject>): List<List<Subject>> {
         val subjectNames = getAllSubjectNames(subjects).distinct();
         println(subjectNames)
         return subjectNames.map { subjectName ->
@@ -123,7 +122,7 @@ class StudyPlanner(private val subjects: List<Subject>) {
 
     }
 
-    fun groupSubjectListAsMap(subject: List<Subject>): Map<String, List<Subject>> {
+    fun groupSubjectListAsMap(subjects: List<Subject>): Map<String, List<Subject>> {
         val map = mutableMapOf<String, List<Subject>>();
         val subjectNames = getAllSubjectNames(subjects).distinct();
         subjectNames.forEach { subjectName ->
@@ -151,7 +150,7 @@ class StudyPlanner(private val subjects: List<Subject>) {
     private fun printSubject(subject: Subject) =
         print("{ ${subject.subject} - ${subject.className} - ${datesToString(subject.dates)} } ")
 
-    private fun datesToString(dates: List<Date>) = (dates.map { it -> "${it.weekDay} - ${it.from} - ${it.to}" })
+    private fun datesToString(dates: List<Date>) = (dates.map { "${it.weekDay} - ${it.from} - ${it.to}" })
 
 }
 
@@ -161,18 +160,3 @@ data class Output(
     val day: String,
     val time: String,
 )
-
-//val names = getAllSubjectNames(subjects).distinct();
-//        val classes = getAllSubjectClasses(subjects).distinct();
-//        val lenght = if (names.size > classes.size) names.size.toDouble()
-//            .pow(classes.size.toDouble()) else classes.size.toDouble()
-//            .pow(names.size.toDouble())
-//
-//        val maxFistIt = (lenght / names.size).toInt()
-//
-//        for (index in 0..maxFistIt) {
-//            val name = names[index]
-//
-//        }
-//
-//        val resultArray = mutableListOf<List<String>>()

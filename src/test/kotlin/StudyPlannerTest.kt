@@ -49,7 +49,7 @@ class StudyPlannerTest {
 
     @Test
     fun getValidVariation(): Unit {
-        val result = obj?.getValidSearchList(this.testSubjects) ?: throw Exception("obj is null")
+        val result = obj?.findValidSearchCombinations(this.testSubjects) ?: throw Exception("obj is null")
 
         assert(result[0][0] == "B1")
         assert(result[0][1] == "A1")
@@ -98,7 +98,7 @@ class StudyPlannerTest {
     fun generateList(): Unit {
         val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
 
-        val result1 = testObject.generateList("A", 3, 2, 6)
+        val result1 = testObject.generateCombinationList("A", 3, 2, 6)
         assertEquals(6, result1.size)
         assertEquals("A1", result1[0])
         assertEquals("A1", result1[1])
@@ -107,7 +107,7 @@ class StudyPlannerTest {
         assertEquals("A2", result1[4])
         assertEquals("A2", result1[5])
 
-        val result2 = testObject.generateList("A", 1, 3, 6)
+        val result2 = testObject.generateCombinationList("A", 1, 3, 6)
         assertEquals(6, result2.size)
         assertEquals("A1", result2[0])
         assertEquals("A2", result2[1])
@@ -116,7 +116,7 @@ class StudyPlannerTest {
         assertEquals("A2", result2[4])
         assertEquals("A3", result2[5])
 
-        val result3 = testObject.generateList("A", 1, 3, 8)
+        val result3 = testObject.generateCombinationList("A", 1, 3, 8)
         assertEquals(8, result3.size)
         assertEquals("A1", result3[0])
         assertEquals("A2", result3[1])

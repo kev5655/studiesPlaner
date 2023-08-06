@@ -13,42 +13,48 @@ class StudyPlanner(private val subjects: List<Subject>) {
         println(subjectsToDo.size)
         println(subjectsOption.size)
 
-        getValidSearchList(subjectsToDo)
+        findValidSearchCombinations(subjectsToDo)
 
 
         return Output("Test", "Test", "Test")
     }
 
 
-    fun getValidSearchList(subjects: List<Subject>): List<List<String>> {
-        val combination: MutableList<List<String>> = mutableListOf()
-        val numberOfVariation = calcNumberOfVariation(subjects)
-        println(numberOfVariation)
-        val variationMap = variationDataStruct(subjects)
-        val sortedMap = variationMap.toList().sortedByDescending { (_, value) -> value }.toMap()
-        println(variationMap)
-        val filteredMap = sortedMap.filter { (_, value) -> value > 1 }
-        println(filteredMap)
-        val stepUpList = generatePowersOfTwoDescending(filteredMap.size)
-        while (stepUpList.size < sortedMap.size) {
+    fun findValidSearchCombinations(subjects: List<Subject>): List<List<String>> {
+        val validCombinations: MutableList<List<String>> = mutableListOf()
+        val numberOfVariations = calculateNumberOfVariations(subjects)
+        println(numberOfVariations)
+        val variationMap = buildVariationDataMap(subjects)
+        val sortedVariationMap = variationMap.toList().sortedByDescending { (_, value) -> value }.toMap()
+        println(sortedVariationMap)
+        val filteredVariationMap = sortedVariationMap.filter { (_, value) -> value > 1 }
+        println(filteredVariationMap)
+        val stepUpList = generatePowersOfTwoDescending(filteredVariationMap.size)
+        while (stepUpList.size < sortedVariationMap.size) {
             stepUpList.add(0)
         }
         println(stepUpList)
 
         var index = 0
-        sortedMap.forEach { entry ->
-            combination.add(generateList(entry.key, stepUpList[index], entry.value, numberOfVariation))
+        sortedVariationMap.forEach { entry ->
+            validCombinations.add(
+                generateCombinationList(
+                    entry.key,
+                    stepUpList[index],
+                    entry.value,
+                    numberOfVariations
+                )
+            )
             index++
         }
 
-
-        println(transposeLists(combination))
-        return transposeLists(combination);
+        println(transposeLists(validCombinations))
+        return transposeLists(validCombinations)
     }
 
     fun <T> transposeLists(inputList: List<List<T>>): List<List<T>> {
         val result = mutableListOf<List<T>>()
-        inputList.forEach { list -> if (list.size != inputList[0].size) throw Exception("Combination List has not the same length") }
+        inputList.forEach { list -> if (list.size != inputList[0].size) throw Exception("Combination List does not have the same length") }
         for (i in inputList[0].indices) {
             val sublist = mutableListOf<T>()
             for (list in inputList) {
@@ -59,54 +65,54 @@ class StudyPlanner(private val subjects: List<Subject>) {
         return result
     }
 
-    fun generateList(base: String, countUpStep: Int, maxCounter: Int, listLength: Int): List<String> {
-        val list = mutableListOf<String>()
+    fun generateCombinationList(base: String, countUpStep: Int, maxCounter: Int, listLength: Int): List<String> {
+        val combinationList = mutableListOf<String>()
         var counter = 1
         var step = 1
         for (i in 0 until listLength) {
             if (counter > step * countUpStep) step++
-            if (step > maxCounter) step = 1;
-            list.add("${base}${step}")
+            if (step > maxCounter) step = 1
+            combinationList.add("${base}${step}")
             counter++
         }
-        println("countStepUp: ${countUpStep} maxCounter: ${maxCounter} List: ${list}")
-        return list;
+        println("countStepUp: ${countUpStep} maxCounter: ${maxCounter} List: ${combinationList}")
+        return combinationList
     }
 
     fun generatePowersOfTwoDescending(length: Int): MutableList<Int> {
-        val powersOfTwo = mutableListOf<Int>()
+        val powersOfTwoList = mutableListOf<Int>()
 
         var value = 1
         var count = 0
 
         while (count < length) {
-            powersOfTwo.add(value)
+            powersOfTwoList.add(value)
             value *= 2
             count++
         }
-        return powersOfTwo.reversed().toMutableList()
+        return powersOfTwoList.reversed().toMutableList()
     }
 
+    fun buildVariationDataMap(subjects: List<Subject>): Map<String, Int> {
+        val subjectNames = getAllSubjectNames(subjects).distinct()
+        val subjectCounts = subjectNames.map { name -> getHowManyClassesHasSubject(subjects, name) }
+        if (subjectNames.size != subjectCounts.size) throw Exception("List of names and List of numbers do not have the same length")
 
-    fun variationDataStruct(subjects: List<Subject>): Map<String, Int> {
-        val names = getAllSubjectNames(subjects).distinct()
-        val numbers = names.map { name -> getHowManyClassesHasSubject(subjects, name) }
-        if (names.size != numbers.size) throw Exception("List of names and List of numbers are have not the same length")
+        val variationDataMap = mutableMapOf<String, Int>()
 
-        val map = mutableMapOf<String, Int>()
-
-        for ((index, name) in names.withIndex()) {
-            map[name] = numbers[index]
+        for ((index, name) in subjectNames.withIndex()) {
+            variationDataMap[name] = subjectCounts[index]
         }
 
-        return map;
+        return variationDataMap
     }
 
-    fun calcNumberOfVariation(subjects: List<Subject>): Int {
-        val names = getAllSubjectNames(subjects).distinct()
-        val numbers = names.map { name -> getHowManyClassesHasSubject(subjects, name) }
-        return numbers.reduce() { store, next -> store * next }
+    fun calculateNumberOfVariations(subjects: List<Subject>): Int {
+        val subjectNames = getAllSubjectNames(subjects).distinct()
+        val subjectCounts = subjectNames.map { name -> getHowManyClassesHasSubject(subjects, name) }
+        return subjectCounts.reduce { store, next -> store * next }
     }
+
 
     fun groupSubjectListAsList(subject: List<Subject>): List<List<Subject>> {
         val subjectNames = getAllSubjectNames(subjects).distinct();

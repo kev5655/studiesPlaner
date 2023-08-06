@@ -7,84 +7,34 @@ import org.junit.jupiter.api.Test
 import java.util.Objects
 
 class StudyPlannerTest {
-    private val testSubjects: List<Subject> =
-        listOf(
-            Subject(
-                "Test",
-                "TestIdA1",
-                "A",
-                PRIORITY.MUST,
-                "Full Time",
-                "1",
-                "01.01.2023",
-                "02.02.2023",
-                listOf(
-                    Date("Mon", "20:00", "21:00", true),
-                    Date("Mon", "20:00", "21:00", true),
-                )
-            ),
-            Subject(
-                "Test",
-                "TestIdA2",
-                "A",
-                PRIORITY.MUST,
-                "Full Time",
-                "2",
-                "01.01.2023",
-                "02.02.2023",
-                listOf(
-                    Date("Mon", "20:00", "21:00", true)
-                )
-            ),
-            Subject("Test",
-                "TestIdB1",
-                "B",
-                PRIORITY.MUST,
-                "Full Time",
-                "1",
-                "01.01.2023",
-                "02.02.2023",
-                listOf(
-                    Date("Mon", "20:00", "21:00",  true)
-                )
-            ),
-            Subject("Test",
-                "TestIdB2",
-                "B",
-                PRIORITY.MUST,
-                "Full Time",
-                "2",
-                "01.01.2023",
-                "02.02.2023",
-                listOf(
-                    Date("Mon", "20:00", "21:00",  true)
-                )
-            ),
-            Subject("Test",
-                "TestIdB3",
-                "B",
-                PRIORITY.MUST,
-                "Full Time",
-                "3",
-                "01.01.2023",
-                "02.02.2023",
-                listOf(
-                    Date("Mon", "20:00", "21:00",  true)
-                )
-            ),
-            Subject("Test",
-                "TestIdC1",
-                "C",
-                PRIORITY.MUST,
-                "Full Time",
-                "1",
-                "01.01.2023",
-                "02.02.2023",
-                listOf(
-                    Date("Mon", "20:00", "21:00",  true)
-                )
+    private val testSubjects: List<Subject> = listOf(
+        Subject(
+            "Test", "TestIdA1", "A", PRIORITY.MUST, "Full Time", "1", "01.01.2023", "02.02.2023", listOf(
+                Date("Mon", "20:00", "21:00", true),
+                Date("Mon", "20:00", "21:00", true),
+            )
+        ), Subject(
+            "Test", "TestIdA2", "A", PRIORITY.MUST, "Full Time", "2", "01.01.2023", "02.02.2023", listOf(
+                Date("Mon", "20:00", "21:00", true)
+            )
+        ), Subject(
+            "Test", "TestIdB1", "B", PRIORITY.MUST, "Full Time", "1", "01.01.2023", "02.02.2023", listOf(
+                Date("Mon", "20:00", "21:00", true)
+            )
+        ), Subject(
+            "Test", "TestIdB2", "B", PRIORITY.MUST, "Full Time", "2", "01.01.2023", "02.02.2023", listOf(
+                Date("Mon", "20:00", "21:00", true)
+            )
+        ), Subject(
+            "Test", "TestIdB3", "B", PRIORITY.MUST, "Full Time", "3", "01.01.2023", "02.02.2023", listOf(
+                Date("Mon", "20:00", "21:00", true)
+            )
+        ), Subject(
+            "Test", "TestIdC1", "C", PRIORITY.MUST, "Full Time", "1", "01.01.2023", "02.02.2023", listOf(
+                Date("Mon", "20:00", "21:00", true)
             )
         )
+    )
 
     var obj: StudyPlanner? = null;
 
@@ -99,16 +49,31 @@ class StudyPlannerTest {
 
     @Test
     fun getValidVariation(): Unit {
-        val result = obj?.getValidVariation(this.testSubjects) ?: throw Exception("obj is null")
+        val result = obj?.getValidSearchList(this.testSubjects) ?: throw Exception("obj is null")
 
+        assert(result[0][0] == "B1")
+        assert(result[0][1] == "A1")
+        assert(result[0][2] == "C1")
 
-        println(result[0])
-        assert(result[0][0].subject == "A")
-        assert(result[0][0].className == "1")
-        assert(result[0][1].subject == "B")
-        assert(result[0][1].className == "1")
-        assert(result[0][2].subject == "C")
-        assert(result[0][2].className == "1")
+        assert(result[1][0] == "B1")
+        assert(result[1][1] == "A2")
+        assert(result[1][2] == "C1")
+
+        assert(result[2][0] == "B2")
+        assert(result[2][1] == "A1")
+        assert(result[2][2] == "C1")
+
+        assert(result[3][0] == "B2")
+        assert(result[3][1] == "A2")
+        assert(result[3][2] == "C1")
+
+        assert(result[4][0] == "B3")
+        assert(result[4][1] == "A1")
+        assert(result[4][2] == "C1")
+
+        assert(result[5][0] == "B3")
+        assert(result[5][1] == "A2")
+        assert(result[5][2] == "C1")
 
     }
 
@@ -129,6 +94,41 @@ class StudyPlannerTest {
         assertFalse(resultNotFoundClass)
     }
 
+    @Test
+    fun generateList(): Unit {
+        val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
+
+        val result1 = testObject.generateList("A", 3, 2, 6)
+        assertEquals(6, result1.size)
+        assertEquals("A1", result1[0])
+        assertEquals("A1", result1[1])
+        assertEquals("A1", result1[2])
+        assertEquals("A2", result1[3])
+        assertEquals("A2", result1[4])
+        assertEquals("A2", result1[5])
+
+        val result2 = testObject.generateList("A", 1, 3, 6)
+        assertEquals(6, result2.size)
+        assertEquals("A1", result2[0])
+        assertEquals("A2", result2[1])
+        assertEquals("A3", result2[2])
+        assertEquals("A1", result2[3])
+        assertEquals("A2", result2[4])
+        assertEquals("A3", result2[5])
+
+        val result3 = testObject.generateList("A", 1, 3, 8)
+        assertEquals(8, result3.size)
+        assertEquals("A1", result3[0])
+        assertEquals("A2", result3[1])
+        assertEquals("A3", result3[2])
+        assertEquals("A1", result3[3])
+        assertEquals("A2", result3[4])
+        assertEquals("A3", result3[5])
+        assertEquals("A1", result3[6])
+        assertEquals("A2", result3[7])
+
+
+    }
 
     @Test
     fun groupSubjectListAsList() {
@@ -154,10 +154,7 @@ class StudyPlannerTest {
     }
 
     private fun assertSubjectList(
-        result: Map<String, List<Subject>>,
-        group: String,
-        expectedSize: Int,
-        expectedIds: List<String>
+        result: Map<String, List<Subject>>, group: String, expectedSize: Int, expectedIds: List<String>
     ) {
         assertNotNull(result[group])
         assertEquals(expectedSize, result[group]?.size)

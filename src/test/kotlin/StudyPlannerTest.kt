@@ -36,11 +36,11 @@ class StudyPlannerTest {
         )
     )
 
-    var obj: StudyPlanner? = null;
+    private var obj: StudyPlanner? = null
 
     @BeforeEach
     fun setUp() {
-        obj = StudyPlanner(testSubjects);
+        obj = StudyPlanner(testSubjects)
     }
 
     @Test
@@ -48,7 +48,7 @@ class StudyPlannerTest {
     }
 
     @Test
-    fun getValidVariation(): Unit {
+    fun getValidVariation() {
         val result = obj?.findValidSearchCombinations(this.testSubjects) ?: throw Exception("obj is null")
 
         assert(result[0][0] == "B1")
@@ -78,7 +78,7 @@ class StudyPlannerTest {
     }
 
     @Test
-    fun hasListAProperty(): Unit {
+    fun hasListAProperty() {
         val condHasId: (Subject, String) -> Boolean = { subject, property -> subject.id == property }
         val condHasClass: (Subject, String) -> Boolean = { subject, property -> subject.className == property }
         val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
@@ -95,7 +95,7 @@ class StudyPlannerTest {
     }
 
     @Test
-    fun generateList(): Unit {
+    fun generateList() {
         val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
 
         val result1 = testObject.generateCombinationList("A", 3, 2, 6)

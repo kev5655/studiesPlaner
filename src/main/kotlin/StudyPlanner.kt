@@ -3,7 +3,7 @@ import data.PRIORITY
 import data.Subject
 
 
-class StudyPlanner(private val subjects: List<Subject>) {
+class StudyPlanner(subjects: List<Subject>) {
 
     private val subjectsToDo: List<Subject> = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
     private val subjectsOption: List<Subject> = getSubjectsByProperty(subjects) { it.priority != PRIORITY.MUST }
@@ -51,7 +51,7 @@ class StudyPlanner(private val subjects: List<Subject>) {
         return transposeLists(validCombinations)
     }
 
-    fun <T> transposeLists(inputList: List<List<T>>): List<List<T>> {
+    private fun <T> transposeLists(inputList: List<List<T>>): List<List<T>> {
         val result = mutableListOf<List<T>>()
         inputList.forEach { list -> if (list.size != inputList[0].size) throw Exception("Combination List does not have the same length") }
         for (i in inputList[0].indices) {
@@ -74,7 +74,7 @@ class StudyPlanner(private val subjects: List<Subject>) {
             combinationList.add("${base}${step}")
             counter++
         }
-        println("countStepUp: ${countUpStep} maxCounter: ${maxCounter} List: ${combinationList}")
+        println("countStepUp: $countUpStep maxCounter: $maxCounter List: $combinationList")
         return combinationList
     }
 
@@ -114,7 +114,7 @@ class StudyPlanner(private val subjects: List<Subject>) {
 
 
     fun groupSubjectListAsList(subjects: List<Subject>): List<List<Subject>> {
-        val subjectNames = getAllSubjectNames(subjects).distinct();
+        val subjectNames = getAllSubjectNames(subjects).distinct()
         println(subjectNames)
         return subjectNames.map { subjectName ->
             getSubjectsByProperty(subjects) { it.subject == subjectName }
@@ -123,8 +123,8 @@ class StudyPlanner(private val subjects: List<Subject>) {
     }
 
     fun groupSubjectListAsMap(subjects: List<Subject>): Map<String, List<Subject>> {
-        val map = mutableMapOf<String, List<Subject>>();
-        val subjectNames = getAllSubjectNames(subjects).distinct();
+        val map = mutableMapOf<String, List<Subject>>()
+        val subjectNames = getAllSubjectNames(subjects).distinct()
         subjectNames.forEach { subjectName ->
             map[subjectName] = getSubjectsByProperty(subjects) { it.subject == subjectName }
         }

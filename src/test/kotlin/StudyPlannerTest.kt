@@ -4,7 +4,7 @@ import data.Subject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.Objects
+import java.util.*
 
 class StudyPlannerTest {
     private val testSubjects: List<Subject> = listOf(
@@ -45,6 +45,7 @@ class StudyPlannerTest {
 
     @Test
     fun bestPractice() {
+        val result = obj?.bestPractice() ?: throw Exception("obj is null")
     }
 
     @Test

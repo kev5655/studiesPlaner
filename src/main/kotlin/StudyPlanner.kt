@@ -13,9 +13,38 @@ class StudyPlanner(subjects: List<Subject>) {
         println(subjectsToDo.size)
         println(subjectsOption.size)
 
-        findValidSearchCombinations(subjectsToDo)
+        val searchList = findValidSearchCombinations(subjectsToDo)
+        val validVariation = replaceSearchListWithSubject(this.subjectsToDo, searchList);
+
+        for (list in validVariation) {
+            for (item in list) {
+                printSubject(item)
+            }
+            println()
+        }
 
         return Output("Test", "Test", "Test")
+    }
+
+    fun replaceSearchListWithSubject(subjects: List<Subject>, searchList: List<List<String>>): List<List<Subject>> {
+        val list = searchList.map { list ->
+            list.map { item -> test(item, subjects) }
+        }
+        return list;
+
+    }
+
+    fun test(item: String, subjects: List<Subject>): Subject {
+        val subAndClass = item.split("-")
+        return getSubjectBySubjectAndClass(subjects, subAndClass[0], subAndClass[1])
+    }
+
+    fun getSubjectBySubjectAndClass(subjects: List<Subject>, subjectName: String, _class: String): Subject {
+
+
+        //return (subjects.filter { subject -> subject.subject == subjectName }
+        //    .find { subject -> subject.className == _class })
+        //   ?: throw Exception("subject not found subjectName: ${subjectName}, class: ${_class}")
     }
 
 
@@ -71,7 +100,7 @@ class StudyPlanner(subjects: List<Subject>) {
         for (i in 0 until listLength) {
             if (counter > step * countUpStep) step++
             if (step > maxCounter) step = 1
-            combinationList.add("${base}${step}")
+            combinationList.add("${base}-${step}")
             counter++
         }
         println("countStepUp: $countUpStep maxCounter: $maxCounter List: $combinationList")

@@ -1,19 +1,25 @@
 import data.Date
 import data.PRIORITY
 import data.Subject
+import java.sql.Time
 
 
 class StudyPlanner(subjects: List<Subject>) {
 
-    private val subjectsToDo: List<Subject> = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
-    private val subjectsOption: List<Subject> = getSubjectsByProperty(subjects) { it.priority != PRIORITY.MUST }
+    private var subjectsToDo: List<Subject>
+    private var subjectsOption: List<Subject>
+
+    init {
+        subjectsToDo = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
+        subjectsOption = getSubjectsByProperty(subjects) { it.priority != PRIORITY.MUST }
+    }
 
     fun bestPractice(): Output {
 
-        println(subjectsToDo.size)
-        println(subjectsOption.size)
+        println("SubjectTodo Size: ${this.subjectsToDo.size}")
+        println("SubjectOption Size: ${this.subjectsOption.size}")
 
-        val searchList = findValidSearchCombinations(subjectsToDo)
+        val searchList = findValidSearchCombinations(this.subjectsToDo)
         val validVariation = replaceSearchListWithSubject(this.subjectsToDo, searchList);
 
         for (list in validVariation) {
@@ -26,42 +32,74 @@ class StudyPlanner(subjects: List<Subject>) {
         return Output("Test", "Test", "Test")
     }
 
-    fun replaceSearchListWithSubject(subjects: List<Subject>, searchList: List<List<String>>): List<List<Subject>> {
-        val list = searchList.map { list ->
-            list.map { item -> test(item, subjects) }
+    private fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<List<Subject>> {
+        var validStudyPlan: List<List<Subject>> = mutableListOf();
+        studyPlans.forEach { studyPlan ->
+            studyPlan.indices.forEach { i ->
+                (i until studyPlan.size).forEach { j ->
+                    val item = studyPlan[i]
+                    val itemToCheck = studyPlan[j]
+                    val timeRanges: List<TimeRange> =
+                        item.dates.map { TimeRange(it.weekDay, it.from, it.to) }
+                    val timeRangesToCheck: List<TimeRange> =
+                        itemToCheck.dates.map { TimeRange(it.weekDay, it.from, it.to) }
+
+                    doTwoTimeRangeListOverlap(timeRanges, timeRangesToCheck)
+
+
+                }
+            }
         }
+
+        return validStudyPlan
+    }
+
+    private fun doTwoTimeRangeListOverlap(rangeList1: List<TimeRange>, rangeList2: List<TimeRange>): Boolean {
+        for (range1 in rangeList1) {
+            for (range2 in rangeList2) {
+                if (TimeRange.doTimeRangeOverlap(range1, range2)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun replaceSearchListWithSubject(
+        subjects: List<Subject>,
+        searchList: List<List<String>>
+    ): List<List<Subject>> {
+        val list = searchList.map {
+            it.map {
+                val subAndClass = it.split("-");
+                getSubjectBySubjectAndClass(subjects, subAndClass[0], subAndClass[1])
+            }
+        }
+
         return list;
-
     }
 
-    fun test(item: String, subjects: List<Subject>): Subject {
-        val subAndClass = item.split("-")
-        return getSubjectBySubjectAndClass(subjects, subAndClass[0], subAndClass[1])
-    }
+    private fun getSubjectBySubjectAndClass(subjects: List<Subject>, subjectName: String, _class: String) = subjects
+        .filter { it.subject == subjectName }
+        .find { it.className == _class }
+        ?: throw Exception("subject not found subjectName: ${subjectName}, class: ${_class}")
 
-    fun getSubjectBySubjectAndClass(subjects: List<Subject>, subjectName: String, _class: String): Subject {
-
-
-        //return (subjects.filter { subject -> subject.subject == subjectName }
-        //    .find { subject -> subject.className == _class })
-        //   ?: throw Exception("subject not found subjectName: ${subjectName}, class: ${_class}")
-    }
 
 
     fun findValidSearchCombinations(subjects: List<Subject>): List<List<String>> {
         val validCombinations: MutableList<List<String>> = mutableListOf()
         val numberOfVariations = calculateNumberOfVariations(subjects)
-        println(numberOfVariations)
+//        println(numberOfVariations)
         val variationMap = buildVariationDataMap(subjects)
         val sortedVariationMap = variationMap.toList().sortedByDescending { (_, value) -> value }.toMap()
-        println(sortedVariationMap)
+//        println(sortedVariationMap)
         val filteredVariationMap = sortedVariationMap.filter { (_, value) -> value > 1 }
-        println(filteredVariationMap)
+//        println(filteredVariationMap)
         val stepUpList = generatePowersOfTwoDescending(filteredVariationMap.size)
         while (stepUpList.size < sortedVariationMap.size) {
             stepUpList.add(0)
         }
-        println(stepUpList)
+//        println(stepUpList)
 
         var index = 0
         sortedVariationMap.forEach { entry ->
@@ -76,7 +114,7 @@ class StudyPlanner(subjects: List<Subject>) {
             index++
         }
 
-        println(transposeLists(validCombinations))
+//        println(transposeLists(validCombinations))
         return transposeLists(validCombinations)
     }
 
@@ -103,7 +141,7 @@ class StudyPlanner(subjects: List<Subject>) {
             combinationList.add("${base}-${step}")
             counter++
         }
-        println("countStepUp: $countUpStep maxCounter: $maxCounter List: $combinationList")
+//        println("countStepUp: $countUpStep maxCounter: $maxCounter List: $combinationList")
         return combinationList
     }
 

@@ -1,7 +1,6 @@
 import data.Date
 import data.PRIORITY
 import data.Subject
-import java.sql.Time
 
 
 class StudyPlanner(subjects: List<Subject>) {
@@ -21,35 +20,103 @@ class StudyPlanner(subjects: List<Subject>) {
 
         val searchList = findValidSearchCombinations(this.subjectsToDo)
         val validVariation = replaceSearchListWithSubject(this.subjectsToDo, searchList);
+        val temp1 = validateCombinationsAndUpdate(validVariation)
+        val temp2 = temp1.flatten()
+        val temp3 = temp2.distinctBy { it.subject }
+        val temp4 = removeCutouts(temp3);
 
+        println("........................................")
+        println("validVariation Size: " + validVariation.size)
         for (list in validVariation) {
             for (item in list) {
                 printSubject(item)
             }
             println()
         }
+        println("........................................")
+
 
         return Output("Test", "Test", "Test")
     }
 
-    private fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<List<Subject>> {
-        var validStudyPlan: List<List<Subject>> = mutableListOf();
-        studyPlans.forEach { studyPlan ->
-            studyPlan.indices.forEach { i ->
-                (i until studyPlan.size).forEach { j ->
-                    val item = studyPlan[i]
-                    val itemToCheck = studyPlan[j]
-                    val timeRanges: List<TimeRange> =
-                        item.dates.map { TimeRange(it.weekDay, it.from, it.to) }
-                    val timeRangesToCheck: List<TimeRange> =
-                        itemToCheck.dates.map { TimeRange(it.weekDay, it.from, it.to) }
+    private fun removeCutouts(validStudyPlan: List<SubjectWidthTimeRange>): List<SubjectWidthTimeRange> {
 
-                    doTwoTimeRangeListOverlap(timeRanges, timeRangesToCheck)
+        val uniqueValidStudyPlan: List<SubjectWidthTimeRange> = mutableListOf()
 
-
+        val sorted = validStudyPlan.sortedBy { it.subject.size }.toMutableList()
+        println("8888888888888888888888888888888888")
+        println("ValidStudyPlan Size: " + sorted.size)
+        for (item in sorted) {
+            item.subject.forEach { printSubject(it) }
+            println()
+        }
+        println("8888888888888888888888888888888888")
+        for (i in 0 until sorted.size) {
+            for (j in i + 1 until sorted.size - 1) {
+                val fistItem = sorted[i].subject
+                val secondItem = sorted[j].subject
+                if (containsListInList(fistItem, secondItem)) {
+                    sorted.removeAt(i)
                 }
             }
         }
+
+        println("//////////////////////////")
+        println("Sorted Size: " + sorted.size)
+        for (item in sorted) {
+            item.subject.forEach { printSubject(it) }
+            println()
+        }
+        println("//////////////////////////")
+
+        return validStudyPlan
+    }
+
+    private fun containsListInList(listToCheck: List<Subject>, list: List<Subject>): Boolean {
+        return list.containsAll(listToCheck)
+    }
+
+    private fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<List<SubjectWidthTimeRange>> {
+        val validStudyPlan: MutableList<MutableList<SubjectWidthTimeRange>> = mutableListOf();
+        studyPlans.forEachIndexed { index, studyPlan ->
+            validStudyPlan.add(mutableListOf())
+            studyPlan.indices.forEach { i ->
+                val firstItem = studyPlan[i]
+                validStudyPlan[index].add(i, SubjectWidthTimeRange(mutableListOf(firstItem),
+                    firstItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }.toMutableList()
+                )
+                )
+                for (j in i + 1 until studyPlan.size) {
+                    validStudyPlan[index][i].subject
+                    val secondItem = studyPlan[j]
+
+                    if (!doTwoTimeRangeListOverlap(
+                            validStudyPlan[index][i].timeRanges,
+                            secondItem.dates.map { TimeRange(it.weekDay, it.from, it.to) })
+                    ) {
+                        validStudyPlan[index][i].subject.add(secondItem)
+                        validStudyPlan[index][i].timeRanges.addAll(secondItem.dates.map {
+                            TimeRange(
+                                it.weekDay,
+                                it.from,
+                                it.to
+                            )
+                        })
+                    }
+                }
+            }
+        }
+        println("----------------------------")
+        println("validStudyPlan Size: " + validStudyPlan.size * validStudyPlan[0].size)
+        for (twoDArray in validStudyPlan) {
+            for (array in twoDArray) {
+                array.subject.forEach { printSubject(it) }
+                println()
+            }
+        }
+        println("----------------------------")
+
+//        println("ValidStudyPlan: $validStudyPlan")
 
         return validStudyPlan
     }
@@ -221,9 +288,19 @@ class StudyPlanner(subjects: List<Subject>) {
 
 }
 
+data class SubjectWidthTimeRange(
+    val subject: MutableList<Subject>,
+    val timeRanges: MutableList<TimeRange>,
+)
 
 data class Output(
     val subject: String,
     val day: String,
     val time: String,
 )
+
+
+//val firstTimeRanges: List<TimeRange> =
+//                        firstItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }
+//                    val secondTimeRanges: List<TimeRange> =
+//                        secondItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }

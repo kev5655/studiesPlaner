@@ -1,23 +1,22 @@
-import java.sql.Time
+
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
 import java.util.Date
 
 class TimeRange(val day: String, private val t1: String, private val t2: String) {
 
     private var time1: Date;
     private var time2: Date;
-    private var dateFormate: SimpleDateFormat = SimpleDateFormat("HH:mm");
+    private var dateFormate: SimpleDateFormat = SimpleDateFormat("ww-EEE-HH:mm");
 
     init {
-        time1 = dateFormate.parse(t1)
-        time2 = dateFormate.parse(t2)
+        time1 = dateFormate.parse("02-$day-$t1")
+        time2 = dateFormate.parse("02-$day-$t2")
         if (time1 > time2) {
             val temp = time1
             time1 = time2
             time2 = temp
         }
-        println(time1)
+//        println("Parsed Times: time1 ${time1}, time2 ${time2}")
     }
 
     fun isTimeBetween(t1: String): Boolean {

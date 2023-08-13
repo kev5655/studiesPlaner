@@ -15,7 +15,7 @@ class StudyPlannerTest {
             )
         ), Subject(
             "Test", "TestIdA2", "Math", PRIORITY.MUST, "Full Time", "2", "01.01.2023", "02.02.2023", listOf(
-                Date("Mon", "10:00", "12:00", true)
+                Date("Mon", "11:00", "12:00", true)
             )
         ), Subject(
             "Test", "TestIdB1", "C++", PRIORITY.MUST, "Full Time", "1", "01.01.2023", "02.02.2023", listOf(

@@ -11,9 +11,7 @@ fun main(args: Array<String>) {
 
 
     val studyPlanner = StudyPlanner(subject)
-    studyPlanner.bestPractice()
-
-
+    studyPlanner.getStudyPlanVariationForMust(subject)
 
 
 }

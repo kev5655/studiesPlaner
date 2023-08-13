@@ -5,52 +5,35 @@ import data.Subject
 
 class StudyPlanner(subjects: List<Subject>) {
 
-    private var subjectsToDo: List<Subject>
     private var subjectsOption: List<Subject>
 
     init {
-        subjectsToDo = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
         subjectsOption = getSubjectsByProperty(subjects) { it.priority != PRIORITY.MUST }
     }
 
-    fun bestPractice(): Output {
+    fun getStudyPlanVariationForMust(subjects: List<Subject>): Output {
+        val subjectsToDo = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
 
-        println("SubjectTodo Size: ${this.subjectsToDo.size}")
-        println("SubjectOption Size: ${this.subjectsOption.size}")
+        println("SubjectTodo Size: ${subjectsToDo.size}")
 
-        val searchList = findValidSearchCombinations(this.subjectsToDo)
-        val validVariation = replaceSearchListWithSubject(this.subjectsToDo, searchList);
-        val temp1 = validateCombinationsAndUpdate(validVariation)
-        val temp2 = temp1.flatten()
-        val temp3 = temp2.distinctBy { it.subject }
-        val temp4 = removeCutouts(temp3);
+        val subjectTemplate = findCombinationTemplate(subjectsToDo)
+        val studyPlanVariation = replaceTemplateWithSubject(subjectsToDo, subjectTemplate);
+        val validStudyPlanVariationAll =
+            validateCombinationsAndUpdate(studyPlanVariation).distinctBy { it.subject }
+        val validStudyPlanVariation = removeCutouts(validStudyPlanVariationAll);
 
-        println("........................................")
-        println("validVariation Size: " + validVariation.size)
-        for (list in validVariation) {
-            for (item in list) {
-                printSubject(item)
-            }
-            println()
-        }
-        println("........................................")
+        printSubjectPlan("validStudyPlanVariation", validStudyPlanVariation)
+
 
 
         return Output("Test", "Test", "Test")
     }
 
-    private fun removeCutouts(validStudyPlan: List<SubjectWidthTimeRange>): List<SubjectWidthTimeRange> {
 
-        val uniqueValidStudyPlan: List<SubjectWidthTimeRange> = mutableListOf()
+    fun removeCutouts(validStudyPlan: List<SubjectWidthTimeRange>): List<SubjectWidthTimeRange> {
 
         val sorted = validStudyPlan.sortedBy { it.subject.size }.toMutableList()
-        println("8888888888888888888888888888888888")
-        println("ValidStudyPlan Size: " + sorted.size)
-        for (item in sorted) {
-            item.subject.forEach { printSubject(it) }
-            println()
-        }
-        println("8888888888888888888888888888888888")
+        printSubjectPlan("Sorted List", sorted)
         for (i in 0 until sorted.size) {
             for (j in i + 1 until sorted.size - 1) {
                 val fistItem = sorted[i].subject
@@ -61,13 +44,7 @@ class StudyPlanner(subjects: List<Subject>) {
             }
         }
 
-        println("//////////////////////////")
-        println("Sorted Size: " + sorted.size)
-        for (item in sorted) {
-            item.subject.forEach { printSubject(it) }
-            println()
-        }
-        println("//////////////////////////")
+        printSubjectPlan("Sorted List after remove ", sorted)
 
         return validStudyPlan
     }
@@ -76,15 +53,17 @@ class StudyPlanner(subjects: List<Subject>) {
         return list.containsAll(listToCheck)
     }
 
-    private fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<List<SubjectWidthTimeRange>> {
+    private fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<SubjectWidthTimeRange> {
         val validStudyPlan: MutableList<MutableList<SubjectWidthTimeRange>> = mutableListOf();
         studyPlans.forEachIndexed { index, studyPlan ->
             validStudyPlan.add(mutableListOf())
             studyPlan.indices.forEach { i ->
                 val firstItem = studyPlan[i]
-                validStudyPlan[index].add(i, SubjectWidthTimeRange(mutableListOf(firstItem),
-                    firstItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }.toMutableList()
-                )
+                validStudyPlan[index].add(
+                    i, SubjectWidthTimeRange(
+                        mutableListOf(firstItem),
+                        firstItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }.toMutableList()
+                    )
                 )
                 for (j in i + 1 until studyPlan.size) {
                     validStudyPlan[index][i].subject
@@ -118,7 +97,7 @@ class StudyPlanner(subjects: List<Subject>) {
 
 //        println("ValidStudyPlan: $validStudyPlan")
 
-        return validStudyPlan
+        return validStudyPlan.flatten()
     }
 
     private fun doTwoTimeRangeListOverlap(rangeList1: List<TimeRange>, rangeList2: List<TimeRange>): Boolean {
@@ -132,7 +111,7 @@ class StudyPlanner(subjects: List<Subject>) {
         return false
     }
 
-    private fun replaceSearchListWithSubject(
+    private fun replaceTemplateWithSubject(
         subjects: List<Subject>,
         searchList: List<List<String>>
     ): List<List<Subject>> {
@@ -146,14 +125,14 @@ class StudyPlanner(subjects: List<Subject>) {
         return list;
     }
 
-    private fun getSubjectBySubjectAndClass(subjects: List<Subject>, subjectName: String, _class: String) = subjects
-        .filter { it.subject == subjectName }
-        .find { it.className == _class }
-        ?: throw Exception("subject not found subjectName: ${subjectName}, class: ${_class}")
+    private fun getSubjectBySubjectAndClass(subjects: List<Subject>, subjectName: String, _class: String) =
+        subjects
+            .filter { it.subject == subjectName }
+            .find { it.className == _class }
+            ?: throw Exception("subject not found subjectName: ${subjectName}, class: ${_class}")
 
 
-
-    fun findValidSearchCombinations(subjects: List<Subject>): List<List<String>> {
+    fun findCombinationTemplate(subjects: List<Subject>): List<List<String>> {
         val validCombinations: MutableList<List<String>> = mutableListOf()
         val numberOfVariations = calculateNumberOfVariations(subjects)
 //        println(numberOfVariations)
@@ -166,6 +145,7 @@ class StudyPlanner(subjects: List<Subject>) {
         while (stepUpList.size < sortedVariationMap.size) {
             stepUpList.add(0)
         }
+        val classes = getAllSubjectClasses(subjects)
 //        println(stepUpList)
 
         var index = 0
@@ -173,6 +153,7 @@ class StudyPlanner(subjects: List<Subject>) {
             validCombinations.add(
                 generateCombinationList(
                     entry.key,
+                    classes,
                     stepUpList[index],
                     entry.value,
                     numberOfVariations
@@ -181,7 +162,6 @@ class StudyPlanner(subjects: List<Subject>) {
             index++
         }
 
-//        println(transposeLists(validCombinations))
         return transposeLists(validCombinations)
     }
 
@@ -198,17 +178,23 @@ class StudyPlanner(subjects: List<Subject>) {
         return result
     }
 
-    fun generateCombinationList(base: String, countUpStep: Int, maxCounter: Int, listLength: Int): List<String> {
+    fun generateCombinationList(
+        base: String,
+        variation: List<String>,
+        countUpStep: Int,
+        maxCounter: Int,
+        listLength: Int
+    ): List<String> {
         val combinationList = mutableListOf<String>()
+        val variationMap = variation.mapIndexed { index, item -> index + 1 to item }.toMap()
         var counter = 1
         var step = 1
         for (i in 0 until listLength) {
             if (counter > step * countUpStep) step++
             if (step > maxCounter) step = 1
-            combinationList.add("${base}-${step}")
+            combinationList.add("${base}-${variationMap.get(step)}")
             counter++
         }
-//        println("countStepUp: $countUpStep maxCounter: $maxCounter List: $combinationList")
         return combinationList
     }
 
@@ -281,12 +267,24 @@ class StudyPlanner(subjects: List<Subject>) {
     private fun getAllSubjectNames(subjects: List<Subject>) = subjects.map { it.subject }
     private fun getAllSubjectClasses(subjects: List<Subject>) = subjects.map { it.className }
 
+    private fun printSubjectPlan(name: String, list: List<SubjectWidthTimeRange>) {
+        println("---------------------------------")
+        println("$name - List Size: " + list.size * list[0].subject.size)
+        for (item in list) {
+            item.subject.forEach { printSubject(it) }
+            println()
+        }
+        println("---------------------------------")
+
+    }
+
     private fun printSubject(subject: Subject) =
         print("{ ${subject.subject} - ${subject.className} - ${datesToString(subject.dates)} } ")
 
     private fun datesToString(dates: List<Date>) = (dates.map { "${it.weekDay} - ${it.from} - ${it.to}" })
 
 }
+
 
 data class SubjectWidthTimeRange(
     val subject: MutableList<Subject>,
@@ -298,9 +296,3 @@ data class Output(
     val day: String,
     val time: String,
 )
-
-
-//val firstTimeRanges: List<TimeRange> =
-//                        firstItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }
-//                    val secondTimeRanges: List<TimeRange> =
-//                        secondItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }

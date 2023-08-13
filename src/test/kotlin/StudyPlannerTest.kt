@@ -45,12 +45,12 @@ class StudyPlannerTest {
 
     @Test
     fun bestPractice() {
-        val result = obj?.bestPractice() ?: throw Exception("obj is null")
+        val result = obj?.getStudyPlanVariationForMust(this.testSubjects) ?: throw Exception("obj is null")
     }
 
     @Test
     fun getValidVariation() {
-        val result = obj?.findValidSearchCombinations(this.testSubjects) ?: throw Exception("obj is null")
+        val result = obj?.findCombinationTemplate(this.testSubjects) ?: throw Exception("obj is null")
 
         assert(result[0][0] == "B1")
         assert(result[0][1] == "A1")
@@ -98,36 +98,38 @@ class StudyPlannerTest {
     @Test
     fun generateList() {
         val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
+        val classes1 = listOf<String>("1", "2")
+        val classes2 = listOf<String>("1", "2", "3")
 
-        val result1 = testObject.generateCombinationList("A", 3, 2, 6)
+
+        val result1 = testObject.generateCombinationList("A", classes1, 3, 2, 6)
         assertEquals(6, result1.size)
-        assertEquals("A1", result1[0])
-        assertEquals("A1", result1[1])
-        assertEquals("A1", result1[2])
-        assertEquals("A2", result1[3])
-        assertEquals("A2", result1[4])
-        assertEquals("A2", result1[5])
+        assertEquals("A-1", result1[0])
+        assertEquals("A-1", result1[1])
+        assertEquals("A-1", result1[2])
+        assertEquals("A-2", result1[3])
+        assertEquals("A-2", result1[4])
+        assertEquals("A-2", result1[5])
 
-        val result2 = testObject.generateCombinationList("A", 1, 3, 6)
+        val result2 = testObject.generateCombinationList("A", classes2, 1, 3, 6)
         assertEquals(6, result2.size)
-        assertEquals("A1", result2[0])
-        assertEquals("A2", result2[1])
-        assertEquals("A3", result2[2])
-        assertEquals("A1", result2[3])
-        assertEquals("A2", result2[4])
-        assertEquals("A3", result2[5])
+        assertEquals("A-1", result2[0])
+        assertEquals("A-2", result2[1])
+        assertEquals("A-3", result2[2])
+        assertEquals("A-1", result2[3])
+        assertEquals("A-2", result2[4])
+        assertEquals("A-3", result2[5])
 
-        val result3 = testObject.generateCombinationList("A", 1, 3, 8)
+        val result3 = testObject.generateCombinationList("A", classes2, 1, 3, 8)
         assertEquals(8, result3.size)
-        assertEquals("A1", result3[0])
-        assertEquals("A2", result3[1])
-        assertEquals("A3", result3[2])
-        assertEquals("A1", result3[3])
-        assertEquals("A2", result3[4])
-        assertEquals("A3", result3[5])
-        assertEquals("A1", result3[6])
-        assertEquals("A2", result3[7])
-
+        assertEquals("A-1", result3[0])
+        assertEquals("A-2", result3[1])
+        assertEquals("A-3", result3[2])
+        assertEquals("A-1", result3[3])
+        assertEquals("A-2", result3[4])
+        assertEquals("A-3", result3[5])
+        assertEquals("A-1", result3[6])
+        assertEquals("A-2", result3[7])
 
     }
 

@@ -120,6 +120,7 @@ class StudyPlanner() {
     }
 
 
+    // ToDo make Generic not with Subject and move to ListUtlis
     fun hasListAProperty(subjects: List<Subject>, property: String, condition: (Subject, String) -> Boolean): Boolean {
         return subjects.fold(false) { store, next ->
             if (store) return true

@@ -4,7 +4,6 @@ import data.Subject
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
 
 class StudyPlannerTest {
     private val testSubjects: List<Subject> = listOf(
@@ -36,21 +35,19 @@ class StudyPlannerTest {
         )
     )
 
-    private var obj: StudyPlanner? = null
 
     @BeforeEach
     fun setUp() {
-        obj = StudyPlanner(testSubjects)
     }
 
     @Test
     fun bestPractice() {
-        val result = obj?.getStudyPlanVariationForMust(this.testSubjects) ?: throw Exception("obj is null")
+        val result = StudyPlanner().getStudyPlanVariationForMust(this.testSubjects)
     }
 
     @Test
     fun getValidVariation() {
-        val result = obj?.findCombinationTemplate(this.testSubjects) ?: throw Exception("obj is null")
+        val result = StudyPlanner().findCombinationTemplate(this.testSubjects)
 
         assert(result[0][0] == "B1")
         assert(result[0][1] == "A1")
@@ -82,12 +79,11 @@ class StudyPlannerTest {
     fun hasListAProperty() {
         val condHasId: (Subject, String) -> Boolean = { subject, property -> subject.id == property }
         val condHasClass: (Subject, String) -> Boolean = { subject, property -> subject.className == property }
-        val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
 
-        val resultFoundId: Boolean = testObject.hasListAProperty(this.testSubjects, "TestIdA1", condHasId)
-        val resultNotFoundId: Boolean = testObject.hasListAProperty(this.testSubjects, "TestIdX1", condHasId)
-        val resultFoundClass: Boolean = testObject.hasListAProperty(this.testSubjects, "1", condHasClass)
-        val resultNotFoundClass: Boolean = testObject.hasListAProperty(this.testSubjects, "99", condHasClass)
+        val resultFoundId: Boolean = StudyPlanner().hasListAProperty(this.testSubjects, "TestIdA1", condHasId)
+        val resultNotFoundId: Boolean = StudyPlanner().hasListAProperty(this.testSubjects, "TestIdX1", condHasId)
+        val resultFoundClass: Boolean = StudyPlanner().hasListAProperty(this.testSubjects, "1", condHasClass)
+        val resultNotFoundClass: Boolean = StudyPlanner().hasListAProperty(this.testSubjects, "99", condHasClass)
 
         assertTrue(resultFoundId)
         assertFalse(resultNotFoundId)
@@ -97,12 +93,11 @@ class StudyPlannerTest {
 
     @Test
     fun generateList() {
-        val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
         val classes1 = listOf<String>("1", "2")
         val classes2 = listOf<String>("1", "2", "3")
 
 
-        val result1 = testObject.generateCombinationList("A", classes1, 3, 2, 6)
+        val result1 = StudyPlanner().generateCombinationTemplateOfOneSequence("A", classes1, 3, 2, 6)
         assertEquals(6, result1.size)
         assertEquals("A-1", result1[0])
         assertEquals("A-1", result1[1])
@@ -111,7 +106,7 @@ class StudyPlannerTest {
         assertEquals("A-2", result1[4])
         assertEquals("A-2", result1[5])
 
-        val result2 = testObject.generateCombinationList("A", classes2, 1, 3, 6)
+        val result2 = StudyPlanner().generateCombinationTemplateOfOneSequence("A", classes2, 1, 3, 6)
         assertEquals(6, result2.size)
         assertEquals("A-1", result2[0])
         assertEquals("A-2", result2[1])
@@ -120,7 +115,7 @@ class StudyPlannerTest {
         assertEquals("A-2", result2[4])
         assertEquals("A-3", result2[5])
 
-        val result3 = testObject.generateCombinationList("A", classes2, 1, 3, 8)
+        val result3 = StudyPlanner().generateCombinationTemplateOfOneSequence("A", classes2, 1, 3, 8)
         assertEquals(8, result3.size)
         assertEquals("A-1", result3[0])
         assertEquals("A-2", result3[1])
@@ -135,8 +130,7 @@ class StudyPlannerTest {
 
     @Test
     fun groupSubjectListAsList() {
-        val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
-        val result = testObject.groupSubjectListAsList(this.testSubjects)
+        val result = StudyPlanner().groupSubjectListAsList(this.testSubjects)
 
         assertEquals(3, result.size)
         assertEquals(2, result[0].size)
@@ -147,9 +141,7 @@ class StudyPlannerTest {
 
     @Test
     fun testGroupSubjectListAsMap() {
-        val testObject: StudyPlanner = if (Objects.nonNull(obj)) obj!! else throw Exception("Obj is null")
-        val result = testObject.groupSubjectListAsMap(this.testSubjects)
-
+        val result = StudyPlanner().groupSubjectListAsMap(this.testSubjects)
 
         assertSubjectList(result, "A", 2, listOf("TestIdA1", "TestIdA2"))
         assertSubjectList(result, "B", 3, listOf("TestIdB1", "TestIdB2", "TestIdB3"))

@@ -13,10 +13,11 @@ class StudyPlanner() {
         val subjectsToDo = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
 
         println("Must Subject length: ${subjectsToDo.size}")
+        val determiner = "-"
 
-        val subjectTemplate = findCombinationTemplate(subjectsToDo)
+        val subjectTemplate = findCombinationTemplate(subjectsToDo, determiner)
         printTemplate(subjectTemplate)
-        val studyPlanVariation = replaceTemplateWithSubject(subjectsToDo, subjectTemplate);
+        val studyPlanVariation = replaceTemplateWithSubject(subjectsToDo, subjectTemplate, determiner);
         printReplaceTemplate(studyPlanVariation)
         val validStudyPlanVariationAll =
             validateCombinationsAndUpdate(studyPlanVariation).distinctBy { it.subject }
@@ -105,13 +106,15 @@ class StudyPlanner() {
         return false
     }
 
+    // ToDo Fix Lambda func
     private fun replaceTemplateWithSubject(
         subjects: List<Subject>,
-        searchList: List<List<String>>
+        searchList: List<List<String>>,
+        delimiter: String
     ): List<List<Subject>> {
         val list = searchList.map {
             it.map {
-                val subAndClass = it.split("-");
+                val subAndClass = it.split(delimiter);
                 getSubjectBySubjectAndClass(subjects, subAndClass[0], subAndClass[1])
             }
         }

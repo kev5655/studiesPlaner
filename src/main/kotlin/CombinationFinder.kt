@@ -7,7 +7,7 @@ import utlis.transposeLists
 
 
 //ToDo Refactoring maybe make not a Map in buildVariationMap
-fun findCombinationTemplate(subjects: List<Subject>): List<List<String>> {
+fun findCombinationTemplate(subjects: List<Subject>, determiter: String): List<List<String>> {
     val validCombinations: MutableList<List<String>> = mutableListOf()
     val numberOfVariations = calculateNumberOfSubjectNamesVariations(subjects)
     val variationMap = buildVariationDataMap(subjects)
@@ -27,7 +27,8 @@ fun findCombinationTemplate(subjects: List<Subject>): List<List<String>> {
                 classes,
                 stepUpList[index],
                 entry.value,
-                numberOfVariations
+                numberOfVariations,
+                determiter
             )
         )
         index++
@@ -61,7 +62,8 @@ fun generateCombinationTemplateOfOneSequence(
     variation: List<String>,
     countUpStep: Int,
     maxCounter: Int,
-    listLength: Int
+    listLength: Int,
+    determiter: String
 ): List<String> {
     val combinationList = mutableListOf<String>()
     val variationMap = variation.mapIndexed { index, item -> index + 1 to item }.toMap()
@@ -70,7 +72,7 @@ fun generateCombinationTemplateOfOneSequence(
     for (i in 0 until listLength) {
         if (counter > step * countUpStep) step++
         if (step > maxCounter) step = 1
-        combinationList.add("${base}-${variationMap[step]}")
+        combinationList.add("${base}${determiter}${variationMap[step]}")
         counter++
     }
     return combinationList

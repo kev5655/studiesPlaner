@@ -78,7 +78,7 @@
       "I2p-I2q": {
         "name": "Programming 2 with Java",
         "priority": "LOW",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2p-I2q",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -96,7 +96,7 @@
       "I2p-I2q": {
         "name": "Project and Training 2",
         "priority": "LOW",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2p-I2q",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -114,7 +114,7 @@
       "I2p": {
         "name": "Web Programming",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2p",
         "statDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -136,7 +136,7 @@
       "I2q": {
         "name": "Web Programming",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2q",
         "statDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -160,7 +160,7 @@
       "I2p": {
         "name": "Operating Systems",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2p",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -182,7 +182,7 @@
       "I2q": {
         "name": "Operating Systems",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2q",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -206,7 +206,7 @@
       "I2p": {
         "name": "International English 1",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2p",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -222,7 +222,7 @@
       "I2q": {
         "name": "International English 1",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I2q",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -240,7 +240,7 @@
       "I3p": {
         "name": "Introduction to IT-Security",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I3p",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -256,7 +256,7 @@
       "I3q": {
         "name": "Introduction to IT-Security",
         "priority": "MEDIUM",
-        "studiesModle": "part time",
+        "studiesModel": "part time",
         "className": "I3q",
         "startDay": "18.09.2023",
         "endDay": "22.01.2024",
@@ -272,6 +272,5 @@
     }
   },
   "subjectsOptionsFullTime": {
-
   }
 }

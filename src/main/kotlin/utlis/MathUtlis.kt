@@ -1,6 +1,6 @@
 package utlis
 
-class Math {
+class MathUtlis {
 
     fun generatePowersOfTwoDescending(length: Int): List<Int> {
         val powersOfTwoList = mutableListOf<Int>()

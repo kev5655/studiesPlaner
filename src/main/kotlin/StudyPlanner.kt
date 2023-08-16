@@ -73,7 +73,7 @@ class StudyPlanner() {
 
                     if (!doTwoTimeRangeListOverlap(
                             validStudyPlan[index][i].timeRanges,
-                            getTimeRangesFromDates(secondItem.dates)
+                            TimeRange.getTimeRangesFromDates(secondItem.dates)
                         )
                     ) {
                         validStudyPlan[index][i].subject.add(secondItem)
@@ -92,8 +92,6 @@ class StudyPlanner() {
         return validStudyPlan.flatten()
     }
 
-    private fun getTimeRangesFromDates(list: List<Date>): List<TimeRange> =
-        list.map { TimeRange(it.weekDay, it.from, it.to) }
 
     private fun doTwoTimeRangeListOverlap(rangeList1: List<TimeRange>, rangeList2: List<TimeRange>): Boolean {
         for (range1 in rangeList1) {

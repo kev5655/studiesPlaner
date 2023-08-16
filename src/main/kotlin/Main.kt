@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
     println("Loaded Subject: ${subject.size}")
 
 
-    val studyPlanner = StudyPlanner(subject)
+    val studyPlanner = StudyPlanner()
     studyPlanner.getStudyPlanVariationForMust(subject)
 
 

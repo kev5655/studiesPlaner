@@ -1,19 +1,16 @@
 package utlis
 
-class MathUtlis {
+fun generatePowersOfTwoDescending(length: Int): List<Int> {
+    val powersOfTwoList = mutableListOf<Int>()
 
-    fun generatePowersOfTwoDescending(length: Int): List<Int> {
-        val powersOfTwoList = mutableListOf<Int>()
+    var value = 1
+    var count = 0
 
-        var value = 1
-        var count = 0
-
-        while (count < length) {
-            powersOfTwoList.add(value)
-            value *= 2
-            count++
-        }
-        return powersOfTwoList.reversed().toMutableList()
+    while (count < length) {
+        powersOfTwoList.add(value)
+        value *= 2
+        count++
     }
-
+    return powersOfTwoList.reversed().toMutableList()
 }
+

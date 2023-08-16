@@ -2,7 +2,7 @@ import data.Subject
 import data.getAllSubjectClasses
 import data.getAllSubjectNames
 import data.getHowManyClassesHasSubject
-import utlis.MathUtlis
+import utlis.generatePowersOfTwoDescending
 import utlis.transposeLists
 
 
@@ -13,7 +13,7 @@ fun findCombinationTemplate(subjects: List<Subject>, determiter: String): List<L
     val variationMap = buildVariationDataMap(subjects)
     val sortedVariationMap = variationMap.toList().sortedByDescending { (_, value) -> value }.toMap()
     val filteredVariationMap = sortedVariationMap.filter { (_, value) -> value > 1 }
-    val stepUpList = MathUtlis().generatePowersOfTwoDescending(filteredVariationMap.size).toMutableList()
+    val stepUpList = generatePowersOfTwoDescending(filteredVariationMap.size).toMutableList()
     while (stepUpList.size < sortedVariationMap.size) {
         stepUpList.add(0)
     }

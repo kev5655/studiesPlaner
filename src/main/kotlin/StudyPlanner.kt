@@ -17,12 +17,12 @@ class StudyPlanner() {
 
         val subjectTemplate = findCombinationTemplate(subjectsToDo, determiner)
         printTemplate(subjectTemplate)
-        val studyPlanVariation = replaceTemplateWithSubject(subjectsToDo, subjectTemplate, determiner);
+        val studyPlanVariation = replaceTemplateWithSubject(subjectsToDo, subjectTemplate, determiner)
         printReplaceTemplate(studyPlanVariation)
         val validStudyPlanVariationAll =
             validateCombinationsAndUpdate(studyPlanVariation).distinctBy { it.subject }
         printSubjectPlan("validStudyPlanVariationAll", validStudyPlanVariationAll)
-        val validStudyPlanVariation = removeCutouts(validStudyPlanVariationAll);
+        val validStudyPlanVariation = removeCutouts(validStudyPlanVariationAll)
 
         printSubjectPlan("validStudyPlanVariation", validStudyPlanVariation)
 
@@ -56,7 +56,7 @@ class StudyPlanner() {
     }
 
     fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<SubjectWidthTimeRange> {
-        val validStudyPlan: MutableList<MutableList<SubjectWidthTimeRange>> = mutableListOf();
+        val validStudyPlan: MutableList<MutableList<SubjectWidthTimeRange>> = mutableListOf()
         studyPlans.forEachIndexed { index, studyPlan ->
             validStudyPlan.add(mutableListOf())
             studyPlan.indices.forEach { i ->
@@ -88,6 +88,10 @@ class StudyPlanner() {
         return validStudyPlan.flatten()
     }
 
+    fun validateCombinationsAndRemove(studyPlans: List<List<Subject>>): List<SubjectWidthTimeRange> {
+
+
+    }
 
     private fun doTwoTimeRangeListOverlap(rangeList1: List<TimeRange>, rangeList2: List<TimeRange>): Boolean {
         for (range1 in rangeList1) {
@@ -108,12 +112,12 @@ class StudyPlanner() {
     ): List<List<Subject>> {
         val list = searchList.map {
             it.map {
-                val subAndClass = it.split(delimiter);
+                val subAndClass = it.split(delimiter)
                 getSubjectBySubjectAndClass(subjects, subAndClass[0], subAndClass[1])
             }
         }
 
-        return list;
+        return list
     }
 
 

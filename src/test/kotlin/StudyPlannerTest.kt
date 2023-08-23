@@ -12,6 +12,14 @@ class StudyPlannerTest {
     }
 
     @Test
+    fun validateCombinationsAndUpdate() {
+        val subjects = listOf(listOf(subject[0]))
+
+        val result = StudyPlanner().validateCombinationsAndUpdate(subjects)
+    }
+
+
+    @Test
     fun getValidVariation() {
 
     }

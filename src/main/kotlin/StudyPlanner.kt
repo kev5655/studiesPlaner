@@ -55,20 +55,16 @@ class StudyPlanner() {
         return list.containsAll(listToCheck)
     }
 
-    private fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<SubjectWidthTimeRange> {
+    fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<SubjectWidthTimeRange> {
         val validStudyPlan: MutableList<MutableList<SubjectWidthTimeRange>> = mutableListOf();
         studyPlans.forEachIndexed { index, studyPlan ->
             validStudyPlan.add(mutableListOf())
             studyPlan.indices.forEach { i ->
                 val firstItem = studyPlan[i]
                 validStudyPlan[index].add(
-                    i, SubjectWidthTimeRange(
-                        mutableListOf(firstItem),
-                        firstItem.dates.map { TimeRange(it.weekDay, it.from, it.to) }.toMutableList()
-                    )
+                    i, SubjectWidthTimeRangeFactory(firstItem)
                 )
                 for (j in i + 1 until studyPlan.size) {
-                    validStudyPlan[index][i].subject
                     val secondItem = studyPlan[j]
 
                     if (!doTwoTimeRangeListOverlap(
@@ -174,6 +170,13 @@ data class SubjectWidthTimeRange(
     val subject: MutableList<Subject>,
     val timeRanges: MutableList<TimeRange>,
 )
+
+private fun SubjectWidthTimeRangeFactory(subject: Subject): SubjectWidthTimeRange {
+    return SubjectWidthTimeRange(
+        mutableListOf(subject),
+        subject.dates.map { TimeRange(it.weekDay, it.from, it.to) }.toMutableList()
+    )
+}
 
 data class Output(
     val subject: String,

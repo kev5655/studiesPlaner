@@ -1,3 +1,4 @@
+import data.PRIORITY
 import data.Subject
 
 fun main(args: Array<String>) {
@@ -6,12 +7,16 @@ fun main(args: Array<String>) {
     val path = "rsc/data2.json"
     val loader = JsonLoader(path)
 
-    val subject: List<Subject> = loader.loadJson().subject
-    println("Loaded Subject: ${subject.size}")
+    val subjects: List<Subject> = loader.loadJson().subject
+    println("Loaded Subject: ${subjects.size}")
 
+    val mustSubjects = subjects.filter { it.priority == PRIORITY.MUST }
+    val optionalSubjects = subjects.filter { it.priority != PRIORITY.MUST }
 
     val studyPlanner = StudyPlanner()
-    studyPlanner.getStudyPlanVariationForMust(subject)
+    studyPlanner.getStudyPlanVariationForMust(mustSubjects)
+    studyPlanner.getStudyPlanVariationForOptional(optionalSubjects)
+
 
 
 }

@@ -12,7 +12,7 @@ class StudyPlannerTest {
 
     @Test
     fun bestPractice() {
-        val result = StudyPlanner().getStudyPlanVariationForMust(subject)
+        val result = StudyPlanner().getStudyPlanVariationForOptional(subject)
     }
 
     @Test
@@ -23,7 +23,7 @@ class StudyPlannerTest {
     }
 
     @Test
-    fun validateCombinationsAndRemove() {
+    fun validateCombinationsAndRemoveNotValid() {
         val notValidSubject = groupedSubjectNotValid
 
         val result1 = StudyPlanner().validateCombinationsAndRemove(notValidSubject)
@@ -33,11 +33,14 @@ class StudyPlannerTest {
     }
 
     @Test
-    fun validateCombinationAndRemoveNotValid() {
+    fun validateCombinationAndRemoveValid() {
         val validSubjects = groupedSubjectValid
-        val result2 = StudyPlanner().validateCombinationsAndRemove(validSubjects)
-        printSubjectPlan("Test - validateCombinationsAndRemove - valid", result2)
-        assertEquals(2, result2.size)
+        val result = StudyPlanner().validateCombinationsAndRemove(validSubjects)
+        printSubjectPlan("Test - validateCombinationsAndRemove - valid", result)
+        assertEquals(1, result.size)
+        assertEquals(2, result[0].subjects.size)
+        assertEquals(3, result[0].timeRanges.size)
+
     }
 
 

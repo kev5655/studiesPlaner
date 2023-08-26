@@ -12,29 +12,29 @@ class CombinationFinderKtTest {
     fun findCombinationTemplate() {
         val result = findCombinationTemplate(subject, "-")
 
-        assert(result[0][0] == "B1")
-        assert(result[0][1] == "A1")
-        assert(result[0][2] == "C1")
+        assertEquals("C++-B1", result[0][0])
+        assertEquals("Math-A1", result[0][1])
+        assertEquals("Algo-1", result[0][2])
 
-        assert(result[1][0] == "B1")
-        assert(result[1][1] == "A2")
-        assert(result[1][2] == "C1")
+        assertEquals("C++-B1", result[1][0])
+        assertEquals("Math-A2", result[1][1])
+        assertEquals("Algo-1", result[1][2])
 
-        assert(result[2][0] == "B2")
-        assert(result[2][1] == "A1")
-        assert(result[2][2] == "C1")
+        assertEquals("C++-B2", result[2][0])
+        assertEquals("Math-A1", result[2][1])
+        assertEquals("Algo-C1", result[2][2])
 
-        assert(result[3][0] == "B2")
-        assert(result[3][1] == "A2")
-        assert(result[3][2] == "C1")
+        assertEquals("C++-B2", result[3][0])
+        assertEquals("Math-A2", result[3][1])
+        assertEquals("Algo-C1", result[3][2])
 
-        assert(result[4][0] == "B3")
-        assert(result[4][1] == "A1")
-        assert(result[4][2] == "C1")
+        assertEquals("C++-B3", result[4][0])
+        assertEquals("Math-A1", result[4][1])
+        assertEquals("Algo-C1", result[4][2])
 
-        assert(result[5][0] == "B3")
-        assert(result[5][1] == "A2")
-        assert(result[5][2] == "C1")
+        assertEquals("C++-B3", result[5][0])
+        assertEquals("Math-A2", result[5][1])
+        assertEquals("Algo-C1", result[5][2])
 
     }
 

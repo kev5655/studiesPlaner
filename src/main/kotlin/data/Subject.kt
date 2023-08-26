@@ -25,7 +25,7 @@ fun getSubjectBySubjectAndClass(subjects: List<Subject>, subjectName: String, _c
     subjects
         .filter { it.subject == subjectName }
         .find { it.className == _class }
-        ?: throw Exception("subject not found subjectName: ${subjectName}, class: ${_class}")
+        ?: throw Exception("subject not found subjectName: $subjectName, class: $_class in $subjects")
 
 fun getHowManyClassesHasSubject(subjects: List<Subject>, subjectName: String) =
     (getSubjectsByProperty(subjects) { it.subject == subjectName }).size

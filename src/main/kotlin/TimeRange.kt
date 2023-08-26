@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimeRange(val day: String, private val t1: String, private val t2: String) {
+class TimeRange(private val day: String, private val t1: String, private val t2: String) {
 
     private var time1: Date;
     private var time2: Date;

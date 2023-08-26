@@ -1,4 +1,10 @@
-import data.*
+import data.PRIORITY
+import data.Subject
+import data.getSubjectBySubjectAndClass
+import data.getSubjectsByProperty
+import utlis.printReplaceTemplate
+import utlis.printSubjectPlan
+import utlis.printTemplate
 
 
 class StudyPlanner() {
@@ -20,7 +26,7 @@ class StudyPlanner() {
         val studyPlanVariation = replaceTemplateWithSubject(subjectsToDo, subjectTemplate, determiner)
         printReplaceTemplate(studyPlanVariation)
         val validStudyPlanVariationAll =
-            validateCombinationsAndUpdate(studyPlanVariation).distinctBy { it.subject }
+            validateCombinationsAndUpdate(studyPlanVariation).distinctBy { it.subjects }
         printSubjectPlan("validStudyPlanVariationAll", validStudyPlanVariationAll)
         val validStudyPlanVariation = removeCutouts(validStudyPlanVariationAll)
 
@@ -32,14 +38,14 @@ class StudyPlanner() {
     }
 
 
-    fun removeCutouts(validStudyPlan: List<SubjectWidthTimeRange>): List<SubjectWidthTimeRange> {
+    fun removeCutouts(validStudyPlan: List<SubjectsWidthTimeRange>): List<SubjectsWidthTimeRange> {
 
-        val sorted = validStudyPlan.sortedBy { it.subject.size }.toMutableList()
+        val sorted = validStudyPlan.sortedBy { it.subjects.size }.toMutableList()
         printSubjectPlan("Sorted List", sorted)
         for (i in 0 until sorted.size) {
             for (j in i + 1 until sorted.size - 1) {
-                val fistItem = sorted[i].subject
-                val secondItem = sorted[j].subject
+                val fistItem = sorted[i].subjects
+                val secondItem = sorted[j].subjects
                 if (containsListInList(fistItem, secondItem)) {
                     sorted.removeAt(i)
                 }
@@ -55,24 +61,24 @@ class StudyPlanner() {
         return list.containsAll(listToCheck)
     }
 
-    fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<SubjectWidthTimeRange> {
-        val validStudyPlan: MutableList<MutableList<SubjectWidthTimeRange>> = mutableListOf()
+    fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<SubjectsWidthTimeRange> {
+        val validStudyPlan: MutableList<MutableList<SubjectsWidthTimeRange>> = mutableListOf()
         studyPlans.forEachIndexed { index, studyPlan ->
             validStudyPlan.add(mutableListOf())
             studyPlan.indices.forEach { i ->
                 val firstItem = studyPlan[i]
                 validStudyPlan[index].add(
-                    i, SubjectWidthTimeRangeFactory(firstItem)
+                    i, SubjectWithTimeRangeFactory(firstItem)
                 )
                 for (j in i + 1 until studyPlan.size) {
                     val secondItem = studyPlan[j]
 
-                    if (!doTwoTimeRangeListOverlap(
+                    if (!rangeListOverlap(
                             validStudyPlan[index][i].timeRanges,
                             TimeRange.getTimeRangesFromDates(secondItem.dates)
                         )
                     ) {
-                        validStudyPlan[index][i].subject.add(secondItem)
+                        validStudyPlan[index][i].subjects.add(secondItem)
                         validStudyPlan[index][i].timeRanges.addAll(secondItem.dates.map {
                             TimeRange(
                                 it.weekDay,
@@ -88,12 +94,38 @@ class StudyPlanner() {
         return validStudyPlan.flatten()
     }
 
-    fun validateCombinationsAndRemove(studyPlans: List<List<Subject>>): List<SubjectWidthTimeRange> {
+    fun validateCombinationsAndRemove(studyPlans: List<List<Subject>>): List<SubjectsWidthTimeRange> {
+        val validStudyPlan: MutableList<SubjectsWidthTimeRange> = mutableListOf()
 
+        for (studyPlan in studyPlans) {
+
+            //validStudyPlan.add(SubjectWithTimeRangeFactory(studyPlan.last()))
+            subject@ for (i in studyPlan.indices) {
+                val subject = studyPlan[i]
+                val validTimeRanges = validStudyPlan.getOrNull(i - 1)?.timeRanges
+                if (validTimeRanges != null) {
+                    validStudyPlan.add(i, SubjectWithTimeRangeFactory(subject))
+                    continue@subject
+                }
+                for (j in i + 1 until studyPlan.size) {
+                    val eachSubjectTimeRanges = TimeRange.getTimeRangesFromDates(studyPlan[j].dates)
+                    if (rangeListOverlap(validTimeRanges!!, eachSubjectTimeRanges)) {
+                        validStudyPlan.removeAt(i)
+                        continue@subject
+                    }
+
+
+                }
+
+                validStudyPlan.add(i, SubjectWithTimeRangeFactory(subject))
+
+            }
+        }
+        return validStudyPlan
 
     }
 
-    private fun doTwoTimeRangeListOverlap(rangeList1: List<TimeRange>, rangeList2: List<TimeRange>): Boolean {
+    private fun rangeListOverlap(rangeList1: List<TimeRange>, rangeList2: List<TimeRange>): Boolean {
         for (range1 in rangeList1) {
             for (range2 in rangeList2) {
                 if (TimeRange.doTimeRangeOverlap(range1, range2)) {
@@ -130,53 +162,16 @@ class StudyPlanner() {
     }
 
 
-    private fun printSubjectPlan(name: String, list: List<SubjectWidthTimeRange>) {
-        println("---------------------------------")
-        println("$name - List Size: " + list.size)
-        for (item in list) {
-            item.subject.forEach { printSubject(it) }
-            println()
-        }
-        println("---------------------------------")
-    }
-
-    private fun printTemplate(template: List<List<String>>) {
-        println("---------------------------------")
-        println("Subject Template")
-        for (list in template) {
-            for (item in list) {
-                print("[${item}] ")
-            }
-            println()
-        }
-        println("---------------------------------")
-    }
-
-
-    private fun printReplaceTemplate(studyPlanVariation: List<List<Subject>>) {
-        println("---------------------------------")
-        println("Replaced Template with Subjects")
-        for (list in studyPlanVariation) {
-            for (item in list) {
-                printSubject(item)
-            }
-            println()
-        }
-        println("---------------------------------")
-
-    }
-
-
 }
 
 
-data class SubjectWidthTimeRange(
-    val subject: MutableList<Subject>,
+data class SubjectsWidthTimeRange(
+    val subjects: MutableList<Subject>,
     val timeRanges: MutableList<TimeRange>,
 )
 
-private fun SubjectWidthTimeRangeFactory(subject: Subject): SubjectWidthTimeRange {
-    return SubjectWidthTimeRange(
+private fun SubjectWithTimeRangeFactory(subject: Subject): SubjectsWidthTimeRange {
+    return SubjectsWidthTimeRange(
         mutableListOf(subject),
         subject.dates.map { TimeRange(it.weekDay, it.from, it.to) }.toMutableList()
     )

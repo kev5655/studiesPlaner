@@ -30,9 +30,6 @@ fun getSubjectBySubjectAndClass(subjects: List<Subject>, subjectName: String, _c
 fun getHowManyClassesHasSubject(subjects: List<Subject>, subjectName: String) =
     (getSubjectsByProperty(subjects) { it.subject == subjectName }).size
 
-fun printSubject(subject: Subject) =
-    print("[{ ${subject.subject} - ${subject.className} - ${datesToString(subject.dates)} }] ")
-
 //fun groupSubjectsByNameAsList(subjects: List<Subject>): List<List<Subject>> {
 //    val subjectNames = getAllSubjectNames(subjects).distinct()
 //    println("Subject names: $subjectNames")

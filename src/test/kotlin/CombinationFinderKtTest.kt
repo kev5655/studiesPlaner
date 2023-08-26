@@ -1,5 +1,7 @@
+import data.testSubjects
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+
 
 class CombinationFinderKtTest {
 
@@ -8,7 +10,7 @@ class CombinationFinderKtTest {
 
     @Test
     fun findCombinationTemplate() {
-        val result = findCombinationTemplate(subject)
+        val result = findCombinationTemplate(subject, "-")
 
         assert(result[0][0] == "B1")
         assert(result[0][1] == "A1")
@@ -42,7 +44,7 @@ class CombinationFinderKtTest {
         val classes2 = listOf<String>("1", "2", "3")
 
 
-        val result1 = generateCombinationTemplateOfOneSequence("A", classes1, 3, 2, 6)
+        val result1 = generateCombinationTemplateOfOneSequence("A", classes1, 3, 2, 6, "-")
         assertEquals(6, result1.size)
         assertEquals("A-1", result1[0])
         assertEquals("A-1", result1[1])
@@ -51,7 +53,7 @@ class CombinationFinderKtTest {
         assertEquals("A-2", result1[4])
         assertEquals("A-2", result1[5])
 
-        val result2 = generateCombinationTemplateOfOneSequence("A", classes2, 1, 3, 6)
+        val result2 = generateCombinationTemplateOfOneSequence("A", classes2, 1, 3, 6, "-")
         assertEquals(6, result2.size)
         assertEquals("A-1", result2[0])
         assertEquals("A-2", result2[1])
@@ -60,7 +62,7 @@ class CombinationFinderKtTest {
         assertEquals("A-2", result2[4])
         assertEquals("A-3", result2[5])
 
-        val result3 = generateCombinationTemplateOfOneSequence("A", classes2, 1, 3, 8)
+        val result3 = generateCombinationTemplateOfOneSequence("A", classes2, 1, 3, 8, "-")
         assertEquals(8, result3.size)
         assertEquals("A-1", result3[0])
         assertEquals("A-2", result3[1])

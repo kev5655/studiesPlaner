@@ -1,6 +1,10 @@
 import data.Subject
+import data.groupedSubjectNotValid
+import data.groupedSubjectValid
+import data.testSubjects
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import utlis.printSubjectPlan
 
 class StudyPlannerTest {
 
@@ -16,6 +20,24 @@ class StudyPlannerTest {
         val subjects = listOf(listOf(subject[0]))
 
         val result = StudyPlanner().validateCombinationsAndUpdate(subjects)
+    }
+
+    @Test
+    fun validateCombinationsAndRemove() {
+        val notValidSubject = groupedSubjectNotValid
+
+        val result1 = StudyPlanner().validateCombinationsAndRemove(notValidSubject)
+        printSubjectPlan("Test - validateCombinationsAndRemove - not valid", result1)
+        assertEquals(0, result1.size)
+
+    }
+
+    @Test
+    fun validateCombinationAndRemoveNotValid() {
+        val validSubjects = groupedSubjectValid
+        val result2 = StudyPlanner().validateCombinationsAndRemove(validSubjects)
+        printSubjectPlan("Test - validateCombinationsAndRemove - valid", result2)
+        assertEquals(2, result2.size)
     }
 
 

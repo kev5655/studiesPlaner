@@ -5,7 +5,7 @@ import data.Subject
 import data.datesToString
 
 fun printSubject(subject: Subject) =
-    print("[{ ${subject.subject} - ${subject.className} - ${datesToString(subject.dates)} }] ")
+    print("[{ ${subject.subject} - ${subject.className} ${subject.name} - ${datesToString(subject.dates)} }] ")
 
 fun printSubjectPlan(name: String, list: List<StudyPlan>) {
     println("---------------------------------")
@@ -19,7 +19,7 @@ fun printSubjectPlan(name: String, list: List<StudyPlan>) {
 
 fun printTemplate(name: String, template: List<List<String>>) {
     println("---------------------------------")
-    println("Subject Template")
+    println("$name - List Size: ${template.size}")
     for (list in template) {
         for (item in list) {
             print("[${item}] ")
@@ -32,7 +32,7 @@ fun printTemplate(name: String, template: List<List<String>>) {
 
 fun printReplaceTemplate(name: String, studyPlanVariation: List<List<Subject>>) {
     println("---------------------------------")
-    println("Replaced Template with Subjects")
+    println("$name - List Size: ${studyPlanVariation.size}")
     for (list in studyPlanVariation) {
         for (item in list) {
             printSubject(item)

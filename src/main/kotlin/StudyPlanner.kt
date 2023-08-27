@@ -1,5 +1,6 @@
 import data.Subject
 import data.getSubjectBySubjectAndClass
+import utlis.containsListInList
 import utlis.printReplaceTemplate
 import utlis.printSubjectPlan
 import utlis.printTemplate
@@ -13,11 +14,12 @@ class StudyPlanner() {
         //subjectsOption = getSubjectsByProperty(subjects) { it.priority != PRIORITY.MUST }
     }
 
-    fun getStudyPlanVariationForOptional(subjects: List<Subject>): Output {
+    // ToDo Not Working
+    fun getStudyPlanVariationForOptional(subjects: List<Subject>): List<StudyPlan> {
 //        val subjectsToDo = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
 
         println("Must Subject length: ${subjects.size}")
-        val determiner = "-"
+        val determiner = "#"
 
         val subjectTemplate = findCombinationTemplate(subjects, determiner)
         printTemplate("Template for StudyPlan", subjectTemplate)
@@ -26,20 +28,19 @@ class StudyPlanner() {
         val validStudyPlanVariationAll =
             validateCombinationsAndUpdate(studyPlanVariation).distinctBy { it.subjects }
         printSubjectPlan("validStudyPlanVariationAll", validStudyPlanVariationAll)
-        val validStudyPlanVariation = removeCutouts(validStudyPlanVariationAll)
+//        val validStudyPlanVariation = removeCutouts(validStudyPlanVariationAll)
 
-        printSubjectPlan("validStudyPlanVariation", validStudyPlanVariation)
+//        printSubjectPlan("validStudyPlanVariation", validStudyPlanVariation)
 
 
-
-        return Output("Test", "Test", "Test")
+        return validStudyPlanVariationAll
     }
 
-    fun getStudyPlanVariationForMust(subjects: List<Subject>): Output {
+    fun getStudyPlanVariationForMust(subjects: List<Subject>): List<StudyPlan> {
 //        val subjectsToDo = getSubjectsByProperty(subjects) { it.priority == PRIORITY.MUST }
 
         println("Must Subject length: ${subjects.size}")
-        val determiner = "-"
+        val determiner = "#"
 
         val subjectTemplate = findCombinationTemplate(subjects, determiner)
         printTemplate("Template for StudyPlan", subjectTemplate)
@@ -52,33 +53,47 @@ class StudyPlanner() {
 
         printSubjectPlan("validStudyPlanVariation", validStudyPlanVariation)
 
-
-
-        return Output("Test", "Test", "Test")
+        return validStudyPlanVariation
     }
 
+    // ToDo Not Working fix it
+    fun findStudyVariation(mustStudyPlans: List<StudyPlan>, optionalStudyPlans: List<StudyPlan>): List<StudyPlan> {
+        // ToDo iterate all must and check is optionalSubject in must and time range not overlap when not add to must or a new list
+
+        val variation = mutableListOf<StudyPlan>()
+        for (must in mustStudyPlans) {
+            for (optional in optionalStudyPlans) {
+                if (!rangeListOverlap(must.timeRanges, optional.timeRanges)) {
+                    val studyPlan = (must.subjects + optional.subjects).toMutableList()
+                    val timeRanges = (must.timeRanges + optional.timeRanges).toMutableList()
+                    variation.add(StudyPlan(studyPlan, timeRanges))
+                }
+            }
+        }
+
+        return variation
+    }
 
     fun removeCutouts(validStudyPlan: List<StudyPlan>): List<StudyPlan> {
 
         val sorted = validStudyPlan.sortedBy { it.subjects.size }.toMutableList()
+        val result = mutableListOf<StudyPlan>()
         printSubjectPlan("Sorted List", sorted)
         for (i in 0 until sorted.size) {
+            result.add(sorted[i])
             for (j in i + 1 until sorted.size - 1) {
+
                 val fistItem = sorted[i].subjects
                 val secondItem = sorted[j].subjects
                 if (containsListInList(fistItem, secondItem)) {
-                    sorted.removeAt(i)
+                    result.remove(sorted[i])
                 }
             }
         }
 
         printSubjectPlan("List without removed Subject that are in the list twice ", sorted)
 
-        return validStudyPlan
-    }
-
-    private fun containsListInList(listToCheck: List<Subject>, list: List<Subject>): Boolean {
-        return list.containsAll(listToCheck)
+        return result
     }
 
     fun validateCombinationsAndUpdate(studyPlans: List<List<Subject>>): List<StudyPlan> {
@@ -88,7 +103,7 @@ class StudyPlanner() {
             studyPlan.indices.forEach { i ->
                 val firstItem = studyPlan[i]
                 validStudyPlan[index].add(
-                    i, SubjectWithTimeRangeFactory(firstItem)
+                    i, subjectWithTimeRangeFactory(firstItem)
                 )
                 for (j in i + 1 until studyPlan.size) {
                     val secondItem = studyPlan[j]
@@ -125,7 +140,7 @@ class StudyPlanner() {
         return convStudyPlan
     }
 
-    private fun convert(studyPlans: List<List<Subject>>): List<StudyPlan> {
+    fun convert(studyPlans: List<List<Subject>>): List<StudyPlan> {
         val converted = mutableListOf<StudyPlan>()
 
         for ((index, studyPlan) in studyPlans.withIndex()) {
@@ -181,7 +196,7 @@ data class StudyPlan(
     val timeRanges: MutableList<TimeRange>,
 )
 
-private fun SubjectWithTimeRangeFactory(subject: Subject): StudyPlan {
+private fun subjectWithTimeRangeFactory(subject: Subject): StudyPlan {
     return StudyPlan(
         mutableListOf(subject),
         subject.dates.map { TimeRange(it.weekDay, it.from, it.to) }.toMutableList()

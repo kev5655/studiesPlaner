@@ -1,7 +1,4 @@
-import data.Subject
-import data.getAllSubjectClasses
-import data.getAllSubjectNames
-import data.getHowManyClassesHasSubject
+import data.*
 import utlis.generatePowersOfTwoDescending
 import utlis.transposeLists
 
@@ -17,14 +14,15 @@ fun findCombinationTemplate(subjects: List<Subject>, determiter: String): List<L
     while (stepUpList.size < sortedVariationMap.size) {
         stepUpList.add(0)
     }
-    val classes = getAllSubjectClasses(subjects)
 
     var index = 0
     sortedVariationMap.forEach { entry ->
+        val filteredSubject = getSubjectsByProperty(subjects) { it.subject == entry.key }
+        val classVariation = getAllSubjectClasses(filteredSubject)
         validCombinations.add(
             generateCombinationTemplateOfOneSequence(
                 entry.key,
-                classes,
+                classVariation,
                 stepUpList[index],
                 entry.value,
                 numberOfVariations,

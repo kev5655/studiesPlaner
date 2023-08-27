@@ -1,23 +1,53 @@
-import data.Subject
-import data.groupedSubjectNotValid
-import data.groupedSubjectValid
-import data.testSubjects
+import data.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import utlis.printSubjectPlan
 
 class StudyPlannerTest {
 
-    private val subject = testSubjects
+    private val notValidsubject = notValidTestSubjects
 
     @Test
     fun bestPractice() {
-        val result = StudyPlanner().getStudyPlanVariationForOptional(subject)
+        val result = StudyPlanner().getStudyPlanVariationForOptional(notValidsubject)
+    }
+
+    @Test
+    fun getStudyPlanVariationForOptional() {
+
+        val result = StudyPlanner().getStudyPlanVariationForOptional(notValidsubject)
+        printSubjectPlan("Test - Result", result)
+
+
+    }
+
+    @Test
+    fun findStudyVariation() {
+
+        val must1 = validStudyPLanMustAndOptional[0]
+        val optional1 = validStudyPLanMustAndOptional[1]
+
+        val result1 = StudyPlanner().findStudyVariation(must1, optional1)
+        printSubjectPlan("Test - Result", result1)
+        assertEquals(4, result1.size)
+        assertEquals(3, result1[0].subjects.size)
+        assertEquals(3, result1[1].subjects.size)
+        assertEquals(3, result1[2].subjects.size)
+        assertEquals(3, result1[3].subjects.size)
+
+        val must2 = notValidStudyPLanMustAndOptional[0]
+        val optional2 = notValidStudyPLanMustAndOptional[1]
+        val result2 = StudyPlanner().findStudyVariation(must2, optional2)
+        printSubjectPlan("Test - Result 2", result2)
+        assertEquals(3, result2.size)
+        assertEquals(3, result2[0].subjects.size)
+        assertEquals(3, result2[1].subjects.size)
+        assertEquals(3, result2[2].subjects.size)
     }
 
     @Test
     fun validateCombinationsAndUpdate() {
-        val subjects = listOf(listOf(subject[0]))
+        val subjects = listOf(listOf(notValidsubject[0]))
 
         val result = StudyPlanner().validateCombinationsAndUpdate(subjects)
     }
@@ -54,10 +84,10 @@ class StudyPlannerTest {
         val condHasId: (Subject, String) -> Boolean = { subject, property -> subject.id == property }
         val condHasClass: (Subject, String) -> Boolean = { subject, property -> subject.className == property }
 
-        val resultFoundId: Boolean = StudyPlanner().hasListAProperty(subject, "TestIdA1", condHasId)
-        val resultNotFoundId: Boolean = StudyPlanner().hasListAProperty(subject, "TestIdX1", condHasId)
-        val resultFoundClass: Boolean = StudyPlanner().hasListAProperty(subject, "1", condHasClass)
-        val resultNotFoundClass: Boolean = StudyPlanner().hasListAProperty(subject, "99", condHasClass)
+        val resultFoundId: Boolean = StudyPlanner().hasListAProperty(notValidsubject, "TestIdA1", condHasId)
+        val resultNotFoundId: Boolean = StudyPlanner().hasListAProperty(notValidsubject, "TestIdX1", condHasId)
+        val resultFoundClass: Boolean = StudyPlanner().hasListAProperty(notValidsubject, "1", condHasClass)
+        val resultNotFoundClass: Boolean = StudyPlanner().hasListAProperty(notValidsubject, "99", condHasClass)
 
         assertTrue(resultFoundId)
         assertFalse(resultNotFoundId)

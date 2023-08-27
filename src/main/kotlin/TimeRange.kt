@@ -8,9 +8,6 @@ class TimeRange(private val day: String, private val t1: String, private val t2:
 
     init {
         val dateFormat: SimpleDateFormat = SimpleDateFormat("ww-EEE-HH:mm", Locale.ENGLISH);
-
-        println("$day - $t1 - $t2 ")
-
         time1 = dateFormat.parse("02-$day-$t1")
         time2 = dateFormat.parse("02-$day-$t2")
         if (time1 > time2) {

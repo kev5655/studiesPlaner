@@ -35,6 +35,36 @@ fun findCombinationTemplate(subjects: List<Subject>, determiter: String): List<L
     return transposeLists(validCombinations)
 }
 
+/**
+ * @param dataStruct Map<String, Int>
+ *  { Base } -> How may version
+ * @param maxVariation How Many Variation
+ * @param iterationMap  Map<Int, Int>
+ *     { index } -> repeating Variation
+ *     { 0 } -> 4
+ *     { 1 } -> 2
+ *     { 2 } -> 1
+ *     { 3 } -> 0
+ */
+fun findCombinationTemplate(baseList: List<String>, variationList: List<List<String>>, iterationList: List<Int>) {
+    var validCombinations = mutableListOf<List<String>>()
+
+    if (baseList.size != variationList.size) throw Exception("base.size has not same length as variation.size")
+
+    variationList.forEachIndexed() { index, variations ->
+        validCombinations.add(
+            generateCombinationTemplateOfOneSequence(
+                baseList[index],
+                variations,
+                iterationList[index],
+                iterationList.first() * variationList.size,
+
+                )
+        )
+    }
+
+}
+
 private fun calculateNumberOfSubjectNamesVariations(subjects: List<Subject>): Int {
     val subjectNames = getAllSubjectNames(subjects).distinct()
     val subjectCounts = subjectNames.map { name -> getHowManyClassesHasSubject(subjects, name) }

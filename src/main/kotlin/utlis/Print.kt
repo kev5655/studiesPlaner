@@ -1,17 +1,26 @@
 package utlis
 
 import StudyPlan
+import TimeRange
 import data.Subject
 import data.datesToString
 
 fun printSubject(subject: Subject) =
-    print("[{ ${subject.subject} - ${subject.className} ${subject.name} - ${datesToString(subject.dates)} }] ")
+    print("{ ${subject.subject} - ${subject.className} ${subject.name} - ${datesToString(subject.dates)} }, ")
+
+fun printTimeRange(timeRange: TimeRange) {
+    print("${timeRange}, ")
+}
 
 fun printSubjectPlan(name: String, list: List<StudyPlan>) {
     println("---------------------------------")
     println("$name - List Size: " + list.size)
     for (item in list) {
+        print('[')
         item.subjects.forEach { printSubject(it) }
+        print("] ----- [")
+        item.timeRanges.forEach() { printTimeRange(it) }
+        print(']')
         println()
     }
     println("---------------------------------")

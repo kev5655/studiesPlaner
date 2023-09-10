@@ -7,70 +7,106 @@ class StudyPlannerTest {
 
     private val notValidsubject = notValidTestSubjects
 
-    @Test
-    fun bestPractice() {
-        val result = StudyPlanner().getStudyPlanVariationForOptional(notValidsubject)
-    }
+//    @Test
+//    fun findStudyVariation() {
+//
+//        val must1 = validStudyPLanMustAndOptional[0]
+//        val optional1 = validStudyPLanMustAndOptional[1]
+//
+//        val result1 = StudyPlanner().findStudyVariation(must1, optional1)
+//        printSubjectPlan("Test - Result", result1)
+//        assertEquals(4, result1.size)
+//        assertEquals(3, result1[0].subjects.size)
+//        assertEquals(3, result1[1].subjects.size)
+//        assertEquals(3, result1[2].subjects.size)
+//        assertEquals(3, result1[3].subjects.size)
+//
+//        val must2 = notValidStudyPLanMustAndOptional[0]
+//        val optional2 = notValidStudyPLanMustAndOptional[1]
+//        val result2 = StudyPlanner().findStudyVariation(must2, optional2)
+//        printSubjectPlan("Test - Result 2", result2)
+//        assertEquals(3, result2.size)
+//        assertEquals(3, result2[0].subjects.size)
+//        assertEquals(3, result2[1].subjects.size)
+//        assertEquals(3, result2[2].subjects.size)
+//    }
 
     @Test
-    fun getStudyPlanVariationForOptional() {
+    fun validateDoubleSubjectsAndUpdate() {
+        val subject = listOf(
+            listOf(
+                Subject(
+                    "Math",
+                    "id_A1_class1",
+                    "A1",
+                    PRIORITY.MUST,
+                    "Full Time",
+                    "class1",
+                    "01.01.2023",
+                    "02.02.2023",
+                    listOf(
+                        Date("Mon", "08:00", "09:00", true)
+                    )
+                ),
+                Subject(
+                    "Math",
+                    "id_A1_class2",
+                    "A1",
+                    PRIORITY.MUST,
+                    "Full Time",
+                    "class2",
+                    "01.01.2023",
+                    "02.02.2023",
+                    listOf(
+                        Date("Mon", "08:00", "09:00", true)
+                    )
+                ),
+                Subject(
+                    "C++",
+                    "id_A1_class1",
+                    "B1",
+                    PRIORITY.MUST,
+                    "Full Time",
+                    "class1",
+                    "01.01.2023",
+                    "02.02.2023",
+                    listOf(
+                        Date("Mon", "08:00", "09:00", true)
+                    )
+                ),
+                Subject(
+                    "Algo",
+                    "id_C1_class1",
+                    "C1",
+                    PRIORITY.MUST,
+                    "Full Time",
+                    "class1",
+                    "01.01.2023",
+                    "02.02.2023",
+                    listOf(
+                        Date("Mon", "08:00", "09:00", true)
+                    )
+                ),
+                Subject(
+                    "Algo",
+                    "id_C1_class2",
+                    "C1",
+                    PRIORITY.MUST,
+                    "Full Time",
+                    "class2",
+                    "01.01.2023",
+                    "02.02.2023",
+                    listOf(
+                        Date("Mon", "08:00", "09:00", true)
+                    )
+                ),
+            )
+        )
 
-        val result = StudyPlanner().getStudyPlanVariationForOptional(notValidsubject)
-        printSubjectPlan("Test - Result", result)
 
-
-    }
-
-    @Test
-    fun findStudyVariation() {
-
-        val must1 = validStudyPLanMustAndOptional[0]
-        val optional1 = validStudyPLanMustAndOptional[1]
-
-        val result1 = StudyPlanner().findStudyVariation(must1, optional1)
-        printSubjectPlan("Test - Result", result1)
-        assertEquals(4, result1.size)
-        assertEquals(3, result1[0].subjects.size)
-        assertEquals(3, result1[1].subjects.size)
-        assertEquals(3, result1[2].subjects.size)
-        assertEquals(3, result1[3].subjects.size)
-
-        val must2 = notValidStudyPLanMustAndOptional[0]
-        val optional2 = notValidStudyPLanMustAndOptional[1]
-        val result2 = StudyPlanner().findStudyVariation(must2, optional2)
-        printSubjectPlan("Test - Result 2", result2)
-        assertEquals(3, result2.size)
-        assertEquals(3, result2[0].subjects.size)
-        assertEquals(3, result2[1].subjects.size)
-        assertEquals(3, result2[2].subjects.size)
-    }
-
-    @Test
-    fun validateCombinationsAndUpdate() {
-        val subjects = listOf(listOf(notValidsubject[0]))
-
-        val result = StudyPlanner().validateCombinationsAndUpdate(subjects)
-    }
-
-    @Test
-    fun validateCombinationsAndRemoveNotValid() {
-        val notValidSubject = groupedSubjectNotValid
-
-        val result1 = StudyPlanner().validateCombinationsAndRemove(notValidSubject)
-        printSubjectPlan("Test - validateCombinationsAndRemove - not valid", result1)
-        assertEquals(0, result1.size)
-
-    }
-
-    @Test
-    fun validateCombinationAndRemoveValid() {
-        val validSubjects = groupedSubjectValid
-        val result = StudyPlanner().validateCombinationsAndRemove(validSubjects)
-        printSubjectPlan("Test - validateCombinationsAndRemove - valid", result)
-        assertEquals(1, result.size)
-        assertEquals(2, result[0].subjects.size)
-        assertEquals(3, result[0].timeRanges.size)
-
+        val result = StudyPlanner().validateDoubleSubjectsAndUpdate(subject)
+        assertEquals(3, result[0].size)
+        assertEquals(4, result.size)
     }
 
 

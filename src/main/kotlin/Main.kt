@@ -15,11 +15,11 @@ fun main(args: Array<String>) {
     val optionalSubjects = subjects.filter { it.priority != PRIORITY.MUST }
 
     val studyPlanner = StudyPlanner()
-    val must = studyPlanner.getStudyPlanVariationForMust(mustSubjects)
+    val must = getStudyPlanVariationForMust(mustSubjects)
     print("\n90909090909090909009099090909090909090909\n")
-    val optional = studyPlanner.getStudyPlanVariationForOptional(optionalSubjects)
+//    val optional = studyPlanner.getStudyPlanVariationForOptional(optionalSubjects)
 
-    val result = studyPlanner.findStudyVariation(must, optional)
+    val result = studyPlanner.findStudyVariation(must, optionalSubjects)
 
     printSubjectPlan("Result", result)
 

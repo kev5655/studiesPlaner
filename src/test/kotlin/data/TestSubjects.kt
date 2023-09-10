@@ -3,6 +3,8 @@ package data
 import StudyPlan
 import TimeRange
 
+val tempSubject = Subject("TimeRange", "A", "A", PRIORITY.MUST, "A", "A", "A", "A", listOf(Date("A", "A", "A", true)))
+
 val notValidTestSubjects: List<Subject> = listOf(
     Subject(
         "Test", "TestIdA1", "Math", PRIORITY.MUST, "Full Time", "A1", "01.01.2023", "02.02.2023", listOf(
@@ -75,7 +77,7 @@ val validStudyPLanMustAndOptional = listOf(
                         Date("Mon", "08:00", "12:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Mon", "08:00", "12:00"))
+            ), mutableListOf(TimeRange("Mon", "08:00", "12:00", tempSubject))
         ),
         StudyPlan(
             mutableListOf(
@@ -85,7 +87,7 @@ val validStudyPLanMustAndOptional = listOf(
                         Date("Mon", "08:00", "12:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Mon", "08:00", "12:00"))
+            ), mutableListOf(TimeRange("Mon", "08:00", "12:00", tempSubject))
         )
     ),
     listOf(
@@ -103,7 +105,11 @@ val validStudyPLanMustAndOptional = listOf(
                         Date("Thu", "08:00", "12:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Thu", "08:00", "12:00"), TimeRange("Thu", "08:00", "12:00"))
+            ),
+            mutableListOf(
+                TimeRange("Thu", "08:00", "12:00", tempSubject),
+                TimeRange("Thu", "08:00", "12:00", tempSubject)
+            )
         ),
         StudyPlan(
             mutableListOf(
@@ -119,7 +125,11 @@ val validStudyPLanMustAndOptional = listOf(
                         Date("Thu", "08:00", "12:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Thu", "08:00", "12:00"), TimeRange("Thu", "08:00", "12:00"))
+            ),
+            mutableListOf(
+                TimeRange("Thu", "08:00", "12:00", tempSubject),
+                TimeRange("Thu", "08:00", "12:00", tempSubject)
+            )
         )
     )
 )
@@ -134,7 +144,7 @@ val notValidStudyPLanMustAndOptional = listOf(
                         Date("Mon", "08:00", "12:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Mon", "08:00", "12:00"))
+            ), mutableListOf(TimeRange("Mon", "08:00", "12:00", tempSubject))
         ),
         StudyPlan(
             mutableListOf(
@@ -144,7 +154,7 @@ val notValidStudyPLanMustAndOptional = listOf(
                         Date("Mon", "20:00", "22:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Mon", "20:00", "22:00"))
+            ), mutableListOf(TimeRange("Mon", "20:00", "22:00", tempSubject))
         )
     ),
     listOf(
@@ -162,7 +172,11 @@ val notValidStudyPLanMustAndOptional = listOf(
                         Date("Thu", "08:00", "12:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Mon", "08:30", "11:00"), TimeRange("Thu", "08:00", "12:00"))
+            ),
+            mutableListOf(
+                TimeRange("Mon", "08:30", "11:00", tempSubject),
+                TimeRange("Thu", "08:00", "12:00", tempSubject)
+            )
         ),
         StudyPlan(
             mutableListOf(
@@ -178,7 +192,11 @@ val notValidStudyPLanMustAndOptional = listOf(
                         Date("Thu", "08:00", "12:00", true)
                     )
                 )
-            ), mutableListOf(TimeRange("Thu", "08:00", "12:00"), TimeRange("Thu", "08:00", "12:00"))
+            ),
+            mutableListOf(
+                TimeRange("Thu", "08:00", "12:00", tempSubject),
+                TimeRange("Thu", "08:00", "12:00", tempSubject)
+            )
         )
     )
 )

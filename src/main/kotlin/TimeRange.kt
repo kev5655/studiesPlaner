@@ -1,10 +1,12 @@
+import data.Subject
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimeRange(private val day: String, private val t1: String, private val t2: String) {
+class TimeRange(private val day: String, private val t1: String, private val t2: String, ref: Subject) {
 
     var time1: Date
     var time2: Date
+    var ref: Subject
 
     init {
         val dateFormat: SimpleDateFormat = SimpleDateFormat("ww-EEE-HH:mm", Locale.ENGLISH);
@@ -15,6 +17,7 @@ class TimeRange(private val day: String, private val t1: String, private val t2:
             time1 = time2
             time2 = temp
         }
+        this.ref = ref;
     }
 
 
@@ -22,11 +25,14 @@ class TimeRange(private val day: String, private val t1: String, private val t2:
         return t1 in time1..time2
     }
 
+    override fun toString(): String {
+        return "{ day='$day', t1='$t1', t2='$t2' }"
+    }
+
     companion object doTimeRangeOverlap {
+        fun getTimeRangesFromDates(subject: Subject): List<TimeRange> =
+            subject.dates.map { TimeRange(it.weekDay, it.from, it.to, subject) }
 
-
-        fun getTimeRangesFromDates(list: List<data.Date>): List<TimeRange> =
-            list.map { TimeRange(it.weekDay, it.from, it.to) }
     }
 
 }
